@@ -239,7 +239,10 @@ Esses models foram implementados no diretório `/repositories/`, promovendo sepa
 
 ### 3.2. Arquitetura (Semana 5)
 
-![Diagrama MVC](assets\diagrama.png)
+<div align="center">
+  <sub>Diagrama de Arquitetura</sub><br>
+  <img src="assets\diagrama.png" width="80%">
+</div>
 
 ### **Views**
 Arquivos `.ejs` localizados na pasta `views/`. São responsáveis por exibir o conteúdo ao usuário e coletar dados através de formulários. Cada página representa uma funcionalidade específica:
@@ -390,7 +393,10 @@ Abaixo estão algumas telas ilustrativas do sistema **Checkin Room**, demonstran
 
 ### 🔐 Tela de Login
 
-![Tela de Login](assets\login.png)
+<div align="center">
+  <sub>Tela de Login</sub><br>
+  <img src="assets/login.png" width="80%">
+</div>
 
 Essa é a porta de entrada do sistema. Aqui, o usuário preenche seu e-mail institucional e senha para acessar a plataforma. A interface é dividida em duas partes: uma visual com a foto do ambiente real da instituição (à esquerda) e o formulário de acesso (à direita), reforçando a identidade do Inteli.
 
@@ -398,7 +404,10 @@ Essa é a porta de entrada do sistema. Aqui, o usuário preenche seu e-mail inst
 
 ### 🏠 Tela Home (Pós-Login)
 
-![Tela Home](assets\home.png)
+<div align="center">
+  <sub>Tela Home</sub><br>
+  <img src="assets/home.png" width="80%">
+</div>
 
 Após o login, o usuário é direcionado para a tela principal do sistema. Nela, ele encontra quatro opções principais:
 - **Ver Salas Disponíveis**: direciona para a tela de agendamento.
@@ -412,7 +421,10 @@ A interface inclui também um campo de busca e ícones de menu lateral para faci
 
 ### 📅 Tela de Reservar Salas
 
-![Tela Reservar](assets\reservar.png)
+<div align="center">
+  <sub>Tela de Reservar Salas</sub><br>
+  <img src="assets/reservar.png" width="80%">
+</div>
 
 Esta tela apresenta uma tabela com a listagem das salas disponíveis, suas capacidades, andares e horários. O botão **"Agendar"** aparece nas células correspondentes aos horários livres, permitindo que o usuário selecione o melhor horário para reserva.
 
@@ -420,7 +432,10 @@ Esta tela apresenta uma tabela com a listagem das salas disponíveis, suas capac
 
 ### 🗂 Tela Minhas Reservas
 
-![Tela Minhas Reservas](assets\minhas-reservas.png)
+<div align="center">
+  <sub>Tela Minhas Reservas</sub><br>
+  <img src="aassets/minhas-reservas.png" width="80%">
+</div>
 
 Aqui o usuário visualiza todas as reservas feitas por ele. Cada cartão mostra a sala, horário e status atual da reserva (ex: confirmada, cancelada ou finalizada). É possível cancelar reservas ainda pendentes diretamente por essa tela.
 
@@ -428,7 +443,10 @@ Aqui o usuário visualiza todas as reservas feitas por ele. Cada cartão mostra 
 
 ### 🛠 Tela Painel do Administrador
 
-![Painel Admin](assets\dasboard.png)
+<div align="center">
+  <sub>Tela Painel do Administrador</sub><br>
+  <img src="assets\dasboard.png" width="80%">
+</div>
 
 Visível apenas para usuários com permissão de administrador. Essa tela exibe todas as reservas realizadas no sistema. O administrador pode aprovar ou rejeitar diretamente as solicitações de reserva e visualizar detalhes como nome do usuário, prioridade (aluno ou professor) e horários.
 
