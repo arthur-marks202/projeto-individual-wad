@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro - Checkin Room</title>
+  <link rel="stylesheet" href="/styles/cadastro.css"> <!-- opcional -->
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .cadastro-box {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 450px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      color: #555;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .tipo-usuario {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
+
+    .tipo-usuario label {
+      flex: 1;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: #2e2640;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #40385c;
+    }
+
+    .link-voltar {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .erro {
+      color: red;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .sucesso {
+      color: green;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="cadastro-box">
+    <h1>Crie sua Conta</h1>
+
+    <% if (mensagemErro) { %>
+      <p class="erro"><%= mensagemErro %></p>
+    <% } %>
+
+    <% if (mensagemSucesso) { %>
+      <p class="sucesso"><%= mensagemSucesso %></p>
+    <% } %>
+
+    <form action="/usuarios" method="POST">
+      <div class="form-group">
+        <label for="nome">Nome completo</label>
+        <input type="text" name="nome" id="nome" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email institucional</label>
+        <input type="email" name="email" id="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="senha">Senha</label>
+        <input type="password" name="senha" id="senha" required>
+      </div>
+
+      <div class="form-group">
+        <label>Tipo de usuário</label>
+        <div class="tipo-usuario">
+          <label><input type="radio" name="tipo_usuario" value="aluno" required> Aluno</label>
+          <label><input type="radio" name="tipo_usuario" value="professor"> Professor</label>
+          <label><input type="radio" name="tipo_usuario" value="admin"> Admin</label>
+        </div>
+      </div>
+
+      <button type="submit">Cadastrar</button>
+    </form>
+
+    <div class="link-voltar">
+      <p>Já tem conta? <a href="/">Faça login</a></p>
+    </div>
+  </div>
+</body>
+</html>

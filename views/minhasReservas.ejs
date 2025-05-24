@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Minhas Reservas - Checkin Room</title>
+  <link rel="stylesheet" href="/styles/minhasReservas.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2e2640;
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      background-color: white;
+      border-collapse: collapse;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #2e2640;
+      color: white;
+    }
+
+    .cancelar-btn {
+      padding: 0.4rem 0.8rem;
+      background-color: #d90429;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .cancelar-btn:hover {
+      background-color: #b10323;
+    }
+
+    .mensagem {
+      text-align: center;
+      font-size: 1.1rem;
+      color: #444;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Minhas Reservas</h1>
+
+  <% if (reservas.length === 0) { %>
+    <p class="mensagem">Você ainda não fez nenhuma reserva.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Sala</th>
+          <th>Localização</th>
+          <th>Capacidade</th>
+          <th>Data</th>
+          <th>Horário</th>
+          <th>Status</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reservas.forEach(reserva => { %>
+          <tr>
+            <td><%= reserva.sala_nome %></td>
+            <td><%= reserva.localizacao %></td>
+            <td><%= reserva.capacidade %> pessoas</td>
+            <td><%= reserva.data_reserva.toISOString().split('T')[0] %></td>
+            <td><%= reserva.horario_inicio.slice(0,5) %> - <%= reserva.horario_fim.slice(0,5) %></td>
+            <td><%= reserva.status_reserva %></td>
+            <td>
+              <% if (reserva.status_reserva !== 'cancelada') { %>
+              <form action="/reservas/<%= reserva.id_reserva %>/cancelar?_method=PUT" method="POST">
+                <button type="submit" class="cancelar-btn">Cancelar</button>
+              </form>
+              <% } else { %>
+                —
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</body>
+</html>

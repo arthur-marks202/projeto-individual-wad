@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home - Checkin Room</title>
+  <link rel="stylesheet" href="/styles/home.css"> <!-- opcional -->
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #2e2640;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .menu-icons a {
+      color: white;
+      text-decoration: none;
+      margin-left: 1rem;
+      font-size: 1.2rem;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    .welcome {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.2rem;
+    }
+
+    .menu-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #2e2640;
+    }
+
+    .card p {
+      margin: 0.8rem 0 1.2rem;
+      color: #444;
+    }
+
+    .card a {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      background-color: #2e2640;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .card a:hover {
+      background-color: #40385c;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Checkin Room</h1>
+    <div class="menu-icons">
+      <a href="/notificacoes">🔔</a>
+      <a href="/logout">🚪 Sair</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="welcome">
+      <p>Bem-vindo, <strong><%= usuario.nome %></strong>!</p>
+    </div>
+
+    <section class="menu-cards">
+      <div class="card">
+        <h2>Minhas Reservas</h2>
+        <p>Veja todas as reservas feitas por você.</p>
+        <a href="/reservas/<%= usuario.id %>/minhas">Acessar</a>
+      </div>
+
+      <div class="card">
+        <h2>Agendar Sala</h2>
+        <p>Consulte a disponibilidade e faça uma nova reserva.</p>
+        <a href="/reservar">Reservar</a>
+      </div>
+
+      <% if (usuario.tipo === 'admin') { %>
+      <div class="card">
+        <h2>Painel Administrativo</h2>
+        <p>Gerencie e aprove as reservas pendentes.</p>
+        <a href="/admin">Painel</a>
+      </div>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel Administrativo - Checkin Room</title>
+  <link rel="stylesheet" href="/styles/admin.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 1rem;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background-color: #2e2640;
+      color: #fff;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn.aprovar {
+      background-color: #6EF38D;
+      color: #000;
+    }
+
+    .btn.cancelar {
+      background-color: #E84A4A;
+      color: #fff;
+    }
+
+    .mensagem {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Painel Administrativo</h1>
+
+  <% if (mensagemSucesso) { %>
+    <p class="mensagem"><%= mensagemSucesso %></p>
+  <% } %>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome da Sala</th>
+        <th>Capacidade</th>
+        <th>Localização</th>
+        <th>Horário</th>
+        <th>Usuário</th>
+        <th>Tipo</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% reservasPendentes.forEach(reserva => { %>
+        <tr>
+          <td><%= reserva.sala_nome %></td>
+          <td><%= reserva.capacidade %> pessoas</td>
+          <td><%= reserva.localizacao %></td>
+          <td><%= reserva.horario_inicio.slice(0,5) %> às <%= reserva.horario_fim.slice(0,5) %></td>
+          <td><%= reserva.usuario_nome %></td>
+          <td><%= reserva.tipo_usuario %></td>
+          <td>
+            <button class="btn aprovar" data-id="<%= reserva.id_reserva %>">Aprovar</button>
+            <button class="btn cancelar" data-id="<%= reserva.id_reserva %>">Cancelar</button>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <script>
+    document.querySelectorAll('.btn.aprovar').forEach(button => {
+      button.addEventListener('click', async () => {
+        const id = button.getAttribute('data-id');
+        try {
+          const response = await fetch(`/reservas/${id}/aprovar`, { method: 'PUT' });
+          if (response.ok) {
+            location.reload();
+          } else {
+            alert('Erro ao aprovar reserva.');
+          }
+        } catch (error) {
+          console.error('Erro:', error);
+          alert('Erro inesperado.');
+        }
+      });
+    });
+
+    document.querySelectorAll('.btn.cancelar').forEach(button => {
+      button.addEventListener('click', async () => {
+        const id = button.getAttribute('data-id');
+        try {
+          const response = await fetch(`/reservas/${id}/cancelar`, { method: 'PUT' });
+          if (response.ok) {
+            location.reload();
+          } else {
+            alert('Erro ao cancelar reserva.');
+          }
+        } catch (error) {
+          console.error('Erro:', error);
+          alert('Erro inesperado.');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

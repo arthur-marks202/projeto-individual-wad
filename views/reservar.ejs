@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reservar Sala - Checkin Room</title>
+  <link rel="stylesheet" href="/styles/reservar.css">
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #2e2640;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #2e2640;
+      color: white;
+    }
+
+    input[type="date"],
+    input[type="time"] {
+      padding: 0.4rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 100%;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      background-color: #2e2640;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #40385c;
+    }
+
+    .erro {
+      color: red;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Reservar Sala</h1>
+
+  <% if (mensagemErro) { %>
+    <p class="erro"><%= mensagemErro %></p>
+  <% } %>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome da Sala</th>
+        <th>Andar</th>
+        <th>Capacidade</th>
+        <th>Data</th>
+        <th>Início</th>
+        <th>Fim</th>
+        <th>Ação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% salas.forEach(sala => { %>
+        <tr>
+          <form action="/reservar/confirmar" method="POST">
+            <td><%= sala.nome %></td>
+            <td><%= sala.localizacao %></td>
+            <td><%= sala.capacidade %> pessoas</td>
+            <td>
+              <input type="hidden" name="id_sala" value="<%= sala.id_sala %>">
+              <input type="date" name="data_reserva" required>
+            </td>
+            <td><input type="time" name="horario_inicio" required></td>
+            <td><input type="time" name="horario_fim" required></td>
+            <td><button type="submit">Agendar</button></td>
+          </form>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>

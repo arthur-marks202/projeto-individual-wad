@@ -141,18 +141,180 @@ CREATE TABLE notificacao (
 ```
 
 ### 3.1.1 BD e Models (Semana 5)
-*Descreva aqui os Models implementados no sistema web*
+1. Usuario
+
+Responsável por representar os usuários do sistema (aluno, professor ou administrador). Os dados são armazenados na tabela `usuario`.
+
+- **Campos:**
+  - `id_usuario`: identificador único (chave primária)
+  - `nome`: nome do usuário
+  - `email`: endereço institucional (único)
+  - `senha`: senha criptografada
+  - `tipo_usuario`: define o tipo de usuário (`aluno`, `professor` ou `admin`)
+
+- **Principais métodos:**
+  - `criar({ nome, email, senha, tipo_usuario })`
+  - `buscarPorEmail(email)`
+  - `buscarPorId(id)`
+  - `listarTodos()`
+
+---
+
+### 2. Sala
+
+Modela as mini salas disponíveis para reserva, com suas características e localização.
+
+- **Campos:**
+  - `id_sala`: identificador único da sala
+  - `nome`: nome da sala (ex: R01, S02)
+  - `capacidade`: número máximo de pessoas
+  - `localizacao`: andar da sala (ex: “0° andar”)
+
+- **Principais métodos:**
+  - `listarTodas()`
+  - `buscarPorId(id_sala)`
+
+---
+
+### 3. Reserva
+
+Gerencia as reservas feitas pelos usuários, incluindo horários e status. Também realiza validações de conflitos de horário.
+
+- **Campos:**
+  - `id_reserva`
+  - `id_usuario` (FK)
+  - `id_sala` (FK)
+  - `data_reserva`
+  - `horario_inicio`
+  - `horario_fim`
+  - `status_reserva`: `pendente`, `aprovada`, `cancelada`
+
+- **Principais métodos:**
+  - `criar({ id_usuario, id_sala, data_reserva, horario_inicio, horario_fim })`
+  - `listarPorUsuario(id_usuario)`
+  - `listarTodasComJoin()`
+  - `atualizarStatus(id, status)`
+  - `verificarConflito(id_sala, data, início, fim)`
+
+---
+
+### 4. Notificacao
+
+Modela notificações que informam usuários sobre mudanças de status nas reservas.
+
+- **Campos:**
+  - `id_notificacao`
+  - `id_usuario` (FK)
+  - `mensagem`
+  - `tipo_notificacao`: ex: `reserva_aprovada`, `reserva_cancelada`
+  - `id_reserva` (opcional, FK)
+  - `data_envio`
+  - `visualizada` (boolean)
+
+- **Principais métodos:**
+  - `create({ id_usuario, tipo_notificacao, mensagem, id_reserva })`
+  - `findByUsuario(id_usuario)`
+  - `findById(id)`
+  - `marcarComoVisualizada(id_notificacao)`
+
+---
+
+### 5. AdministradorAção
+
+Controla o histórico de ações administrativas sobre as reservas.
+
+- **Campos:**
+  - `id_acao`
+  - `id_admin` (FK)
+  - `id_reserva` (FK)
+  - `acao`: `aprovou` ou `cancelou`
+  - `data_acao`
+
+- **Principais métodos:**
+  - `criar({ id_admin, id_reserva, acao })`
+
+---
+
+Esses models foram implementados no diretório `/repositories/`, promovendo separação entre a lógica de negócio e a camada de persistência. Todos os acessos ao banco de dados passam por esses arquivos, garantindo um código mais modular, reutilizável e fácil de testar.
 
 ### 3.2. Arquitetura (Semana 5)
 
-*Posicione aqui o diagrama de arquitetura da sua solução de aplicação web. Atualize sempre que necessário.*
+![Diagrama MVC](assets\diagrama.png)
 
-**Instruções para criação do diagrama de arquitetura**  
-- **Model**: A camada que lida com a lógica de negócios e interage com o banco de dados.
-- **View**: A camada responsável pela interface de usuário.
-- **Controller**: A camada que recebe as requisições, processa as ações e atualiza o modelo e a visualização.
-  
-*Adicione as setas e explicações sobre como os dados fluem entre o Model, Controller e View.*
+### **Views**
+Arquivos `.ejs` localizados na pasta `views/`. São responsáveis por exibir o conteúdo ao usuário e coletar dados através de formulários. Cada página representa uma funcionalidade específica:
+- `login.ejs`: entrada de credenciais de acesso.
+- `cadastro.ejs`: criação de novos usuários (com seleção de perfil).
+- `home.ejs`: acesso ao sistema e navegação principal.
+- `reservar.ejs`: exibe lista de salas e permite selecionar data e horário para reservar.
+- `minhasReservas.ejs`: mostra ao usuário as suas reservas e permite cancelamento.
+- `adminDashboard.ejs`: painel exclusivo para administradores aprovarem ou cancelarem reservas.
+
+---
+
+### **Controllers**
+Os controllers recebem requisições HTTP, processam os dados recebidos, fazem as chamadas aos repositórios e retornam respostas (normalmente uma renderização de uma view com dados). Também controlam a lógica de sessão e autenticação:
+- `usuarioController.js`: responsável por cadastro, login e listagem de usuários.
+- `reservaController.js`: gerencia criação, listagem e atualização de status das reservas.
+- `notificacaoController.js`: manipula notificações (listar, enviar e marcar como visualizadas).
+- `adminController.js`: registra ações administrativas como aprovações de reservas.
+
+---
+
+### **Repositories**
+Camada que interage diretamente com o banco de dados PostgreSQL (via Supabase). Os repositórios encapsulam todas as queries SQL e são invocados pelos controllers:
+- `usuarioRepository.js`
+- `reservaRepository.js`
+- `notificacaoRepository.js`
+- `salaRepository.js`
+- `administradorAcaoRepository.js`
+
+---
+
+### **Models**
+Os models descrevem a estrutura das entidades utilizadas no banco e são usados como referência para desenvolvimento, testes e documentação. No projeto atual, os models estão organizados como objetos JS nas seguintes entidades:
+- `usuario`
+- `reserva`
+- `notificacao`
+- `sala`
+- `administrador_acao`
+
+---
+
+### **Banco de Dados**
+O banco de dados é hospedado no **Supabase** e contém as seguintes tabelas:
+- `usuario`: armazena nome, email, senha e tipo de perfil (admin/aluno/professor).
+- `reserva`: dados sobre agendamento de salas (data, horário, status, usuário, sala).
+- `sala`: dados estruturais das salas cadastradas (nome, capacidade, localização).
+- `notificacao`: mensagens relacionadas a aprovações ou rejeições de reservas.
+- `administrador_acao`: log das ações executadas por administradores.
+
+---
+
+## 📌 Resumo dos Fluxos Principais
+
+### **Login e Cadastro**
+Usuário acessa `login.ejs` ou `cadastro.ejs`, envia os dados que são processados por `usuarioController.js`, validados e persistidos via `usuarioRepository.js`. A sessão do usuário é iniciada automaticamente após o login.
+
+---
+
+### **Reserva de Salas**
+Usuário acessa `reservar.ejs`, seleciona sala, data e horário. `reservaController.js` valida os dados, verifica conflito de horário via `reservaRepository.js`, e se estiver tudo certo, cria a reserva com status "pendente". A reserva aparece na tela `minhasReservas.ejs`.
+
+---
+
+### **Minhas Reservas**
+Na página `minhasReservas.ejs`, o usuário visualiza todas as suas reservas e pode cancelar alguma delas. O cancelamento altera o status da reserva via `reservaController.js` e atualiza o banco através de `reservaRepository.js`.
+
+---
+
+### **Painel Administrativo**
+Exclusivo para usuários do tipo "admin". Ao acessar `adminDashboard.ejs`, todas as reservas pendentes são carregadas via `reservaController.js`. Cada linha tem dois botões: **aprovar** ou **cancelar**. A decisão é salva no banco e registrada via `administradorAcaoRepository.js`.
+
+---
+
+### **Notificações**
+Ao aprovar ou rejeitar reservas, o `notificacaoController.js` cria notificações para os usuários envolvidos. Na tela de notificações (não exibida separadamente), o usuário pode visualizar ou marcar como lidas. Tudo isso é feito com base em `notificacaoRepository.js`.
 
 ### 3.3. Wireframes (Semana 03)
 
@@ -177,16 +339,204 @@ CREATE TABLE notificacao (
 
 ### 3.4. Guia de estilos (Semana 05)
 
-*Descreva aqui orientações gerais para o leitor sobre como utilizar os componentes do guia de estilos de sua solução.*
+O guia de estilos do sistema **Checkin Room** define um conjunto de componentes visuais, tipografias, cores e ícones com o objetivo de garantir uma identidade visual consistente, moderna e acessível em todas as páginas da aplicação.
+
+## 🎨 Tipografia
+
+A hierarquia tipográfica segue os padrões estabelecidos na seção **Typography**, com variações de peso e tamanho para indicar títulos, subtítulos e textos auxiliares. Isso contribui para a escaneabilidade e a leitura rápida das informações nas interfaces.
+
+- `h1` até `h6` são utilizados conforme o nível de importância textual.
+- Títulos principais utilizam fonte destacada (h1 a h2) em roxo escuro (`#3F3357`).
+- Títulos de seções, subtítulos ou legendas de campos seguem a sequência de peso e cor.
+
+## 🟥 Paleta de Cores
+
+As cores foram escolhidas para transmitir modernidade, funcionalidade e acessibilidade:
+
+- **`#E84A4A` (vermelho):** botões de *cancelar*, *agendar* e indicar status de *rejeitada*.
+- **`#3118EF` (azul):** indica status do tipo de usuário *aluno*.
+- **`#18A135` (verde):** indica status *confirmada* ou ações de aprovação.
+- **`#8E6821` (amarelo queimado):** indica usuário do tipo *professor*.
+- Tons neutros como `#3F3357`, `#261B38`, `#120C1D` e `#FFFFFF` são usados em fundo, textos, bordas e estrutura visual da interface.
+
+## 🧭 Ícones
+
+Os ícones foram padronizados para facilitar a navegação e compreensão da interface, com significados claros:
+
+- ☰ Ícone de **menu sanduíche**: alterna a *sidebar lateral*.
+- 🔔 Ícone de **sino**: acessa as *notificações*.
+- 📚 Ícone de **notas**: leva à tela de *reservas*.
+- 📁 Ícone de **pasta**: leva à tela de *minhas reservas*.
+
+Esses ícones estão presentes na navegação lateral e seguem o mesmo padrão visual do restante da aplicação, respeitando a hierarquia visual e a harmonia de cores.
+
+## 🖼️ Ilustrações
+
+As ilustrações utilizadas seguem uma linha visual institucional e tecnológica. São usadas pontualmente na home e em páginas chave para humanizar a interface e reforçar o vínculo com o ambiente físico do Inteli.
+
+---
+
+Este guia de estilos deve ser consultado sempre que novos componentes forem criados ou alterados, garantindo consistência na experiência do usuário e coerência com a identidade visual do sistema **Checkin Room**.
+
 
 
 ### 3.5. Protótipo de alta fidelidade (Semana 05)
 
-*Posicione aqui algumas imagens demonstrativas de seu protótipo de alta fidelidade e o link para acesso ao protótipo completo (mantenha o link sempre público para visualização).*
+## 📸 Protótipo de Alta Fidelidade
 
-### 3.6. WebAPI e endpoints (Semana 05)
+Abaixo estão algumas telas ilustrativas do sistema **Checkin Room**, demonstrando a experiência do usuário durante o uso da plataforma. Cada tela foi desenvolvida com base em princípios de clareza, acessibilidade e fluidez de navegação.
 
-*Utilize um link para outra página de documentação contendo a descrição completa de cada endpoint. Ou descreva aqui cada endpoint criado para seu sistema.*  
+---
+
+### 🔐 Tela de Login
+
+![Tela de Login](assets\login.png)
+
+Essa é a porta de entrada do sistema. Aqui, o usuário preenche seu e-mail institucional e senha para acessar a plataforma. A interface é dividida em duas partes: uma visual com a foto do ambiente real da instituição (à esquerda) e o formulário de acesso (à direita), reforçando a identidade do Inteli.
+
+---
+
+### 🏠 Tela Home (Pós-Login)
+
+![Tela Home](assets\home.png)
+
+Após o login, o usuário é direcionado para a tela principal do sistema. Nela, ele encontra quatro opções principais:
+- **Ver Salas Disponíveis**: direciona para a tela de agendamento.
+- **Minhas Reservas**: exibe todas as reservas que o usuário já fez.
+- **Lembretes**: acesso às notificações recebidas.
+- **Acesso Rápido**: reforça a importância do login institucional para segurança.
+
+A interface inclui também um campo de busca e ícones de menu lateral para facilitar a navegação.
+
+---
+
+### 📅 Tela de Reservar Salas
+
+![Tela Reservar](assets\reservar.png)
+
+Esta tela apresenta uma tabela com a listagem das salas disponíveis, suas capacidades, andares e horários. O botão **"Agendar"** aparece nas células correspondentes aos horários livres, permitindo que o usuário selecione o melhor horário para reserva.
+
+---
+
+### 🗂 Tela Minhas Reservas
+
+![Tela Minhas Reservas](assets\minhas-reservas.png)
+
+Aqui o usuário visualiza todas as reservas feitas por ele. Cada cartão mostra a sala, horário e status atual da reserva (ex: confirmada, cancelada ou finalizada). É possível cancelar reservas ainda pendentes diretamente por essa tela.
+
+---
+
+### 🛠 Tela Painel do Administrador
+
+![Painel Admin](assets\dasboard.png)
+
+Visível apenas para usuários com permissão de administrador. Essa tela exibe todas as reservas realizadas no sistema. O administrador pode aprovar ou rejeitar diretamente as solicitações de reserva e visualizar detalhes como nome do usuário, prioridade (aluno ou professor) e horários.
+
+---
+
+### 🔗 Link do Protótipo Completo
+
+[🔗 Acesse o protótipo completo no Figma](https://www.figma.com/design/2UVmkvQp59TqM8lI4yCnOM/Untitled?node-id=68-412&t=pmopyoE3rDJkOYhA-1) <!-- substitua com o link público do seu protótipo -->
+
+
+## 3.6. WebAPI e Endpoints (Semana 05)
+
+A seguir estão descritos todos os endpoints implementados na API web do sistema **Checkin Room**. Esses endpoints permitem interações como login, cadastro, agendamento de salas, visualização de reservas e administração.
+
+---
+
+### 🔐 Autenticação de Usuário
+
+#### `POST /login`
+- **Descrição**: Realiza o login de um usuário com e-mail e senha.
+- **Body**:
+```json
+{
+  "email": "usuario@sou.inteli.edu.br",
+  "senha": "********"
+}
+```
+- **Resposta**: Redireciona para `/home`.
+
+#### `POST /usuarios`
+- **Descrição**: Cadastra um novo usuário no sistema.
+- **Body**:
+```json
+{
+  "nome": "Usuário Exemplo",
+  "email": "usuario@sou.inteli.edu.br",
+  "senha": "********",
+  "tipo_usuario": "aluno"
+}
+```
+- **Resposta**: Redireciona para a tela de login.
+
+---
+
+### 👤 Usuários
+
+#### `GET /usuarios`
+- **Descrição**: Lista todos os usuários cadastrados (uso administrativo).
+- **Resposta**: JSON com a lista de usuários.
+
+#### `GET /usuarios/:id`
+- **Descrição**: Busca detalhes de um usuário pelo ID.
+- **Resposta**: JSON com os dados do usuário.
+
+---
+
+### 🗓 Reservas
+
+#### `GET /reservar`
+- **Descrição**: Exibe a interface de reservas com listagem de salas e horários disponíveis.
+
+#### `POST /reservas`
+- **Descrição**: Cria uma nova reserva para uma sala.
+- **Body**:
+```json
+{
+  "id_sala": 3,
+  "data_reserva": "2025-05-25",
+  "horario_inicio": "14:00",
+  "horario_fim": "15:00"
+}
+```
+- **Resposta**: Redireciona para `/reservas/:id_usuario/minhas`.
+
+#### `GET /reservas/:id_usuario/minhas`
+- **Descrição**: Lista todas as reservas feitas por um usuário específico.
+
+#### `GET /reservas`
+- **Descrição**: Lista todas as reservas do sistema (uso do administrador).
+
+#### `PUT /reservas/:id/aprovar`
+- **Descrição**: Aprova uma reserva (admin).
+- **Resposta**: Atualiza status e recarrega a tela de administração.
+
+#### `PUT /reservas/:id/cancelar`
+- **Descrição**: Cancela uma reserva (usuário ou admin).
+
+---
+
+### 🛎 Notificações
+
+#### `GET /notificacoes/:id_usuario`
+- **Descrição**: Lista todas as notificações enviadas ao usuário.
+
+#### `PUT /notificacoes/:id`
+- **Descrição**: Marca uma notificação como visualizada.
+
+---
+
+### 🧩 Extras
+
+#### `GET /admin`
+- **Descrição**: Acessa o painel do administrador com todas as reservas pendentes para aprovação ou rejeição.
+
+#### `GET /home`
+- **Descrição**: Página inicial pós-login com atalhos para reservas, lembretes e ações rápidas.
+
+---
 
 ### 3.7 Interface e Navegação (Semana 07)
 

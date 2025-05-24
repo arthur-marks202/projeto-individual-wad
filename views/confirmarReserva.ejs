@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmar Reserva - Checkin Room</title>
+  <link rel="stylesheet" href="/styles/confirmar.css"> <!-- opcional -->
+</head>
+<body>
+  <main class="container">
+    <h1>Confirmação de Reserva</h1>
+
+    <section class="resumo">
+      <p><strong>Sala:</strong> <%= sala.nome %></p>
+      <p><strong>Localização:</strong> <%= sala.localizacao %></p>
+      <p><strong>Capacidade:</strong> <%= sala.capacidade %> pessoas</p>
+      <p><strong>Data:</strong> <%= data_reserva %></p>
+      <p><strong>Horário:</strong> <%= horario_inicio %> - <%= horario_fim %></p>
+    </section>
+
+    <form action="/reservas" method="POST">
+      <input type="hidden" name="id_sala" value="<%= sala.id_sala %>">
+      <input type="hidden" name="data_reserva" value="<%= data_reserva %>">
+      <input type="hidden" name="horario_inicio" value="<%= horario_inicio %>">
+      <input type="hidden" name="horario_fim" value="<%= horario_fim %>">
+      <button type="submit">Confirmar Reserva</button>
+    </form>
+
+    <a href="/reservar">Voltar</a>
+  </main>
+</body>
+</html>
