@@ -103,7 +103,7 @@ body {
 /* ===== SEÇÃO DA IMAGEM ===== */
 .cadastro-image {
   flex: 1;
-  background: url('/assets/login-image.png') center/contain no-repeat;
+  background: url('/images/login-image.png') center/contain no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,8 +118,8 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('/assets/login-image.png') center/contain no-repeat;
-  opacity: 0.8;
+  background: url('/images/login-image.png') center/contain no-repeat;
+  opacity: 0.3;
 }
 
 .cadastro-image-content {
