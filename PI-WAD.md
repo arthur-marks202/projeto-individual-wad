@@ -294,7 +294,7 @@ O banco de dados é hospedado no **Supabase** e contém as seguintes tabelas:
 
 ---
 
-## 📌 Resumo dos Fluxos Principais
+##  Resumo dos Fluxos Principais
 
 ### **Login e Cadastro**
 Usuário acessa `login.ejs` ou `cadastro.ejs`, envia os dados que são processados por `usuarioController.js`, validados e persistidos via `usuarioRepository.js`. A sessão do usuário é iniciada automaticamente após o login.
@@ -344,7 +344,7 @@ Ao aprovar ou rejeitar reservas, o `notificacaoController.js` cria notificaçõe
 
 O guia de estilos do sistema **Checkin Room** define um conjunto de componentes visuais, tipografias, cores e ícones com o objetivo de garantir uma identidade visual consistente, moderna e acessível em todas as páginas da aplicação.
 
-## 🎨 Tipografia
+##  Tipografia
 
 A hierarquia tipográfica segue os padrões estabelecidos na seção **Typography**, com variações de peso e tamanho para indicar títulos, subtítulos e textos auxiliares. Isso contribui para a escaneabilidade e a leitura rápida das informações nas interfaces.
 
@@ -352,7 +352,7 @@ A hierarquia tipográfica segue os padrões estabelecidos na seção **Typograph
 - Títulos principais utilizam fonte destacada (h1 a h2) em roxo escuro (`#3F3357`).
 - Títulos de seções, subtítulos ou legendas de campos seguem a sequência de peso e cor.
 
-## 🟥 Paleta de Cores
+##  Paleta de Cores
 
 As cores foram escolhidas para transmitir modernidade, funcionalidade e acessibilidade:
 
@@ -362,7 +362,7 @@ As cores foram escolhidas para transmitir modernidade, funcionalidade e acessibi
 - **`#8E6821` (amarelo queimado):** indica usuário do tipo *professor*.
 - Tons neutros como `#3F3357`, `#261B38`, `#120C1D` e `#FFFFFF` são usados em fundo, textos, bordas e estrutura visual da interface.
 
-## 🧭 Ícones
+##  Ícones
 
 Os ícones foram padronizados para facilitar a navegação e compreensão da interface, com significados claros:
 
@@ -373,7 +373,7 @@ Os ícones foram padronizados para facilitar a navegação e compreensão da int
 
 Esses ícones estão presentes na navegação lateral e seguem o mesmo padrão visual do restante da aplicação, respeitando a hierarquia visual e a harmonia de cores.
 
-## 🖼️ Ilustrações
+##  Ilustrações
 
 As ilustrações utilizadas seguem uma linha visual institucional e tecnológica. São usadas pontualmente na home e em páginas chave para humanizar a interface e reforçar o vínculo com o ambiente físico do Inteli.
 
@@ -385,13 +385,13 @@ Este guia de estilos deve ser consultado sempre que novos componentes forem cria
 
 ### 3.5. Protótipo de alta fidelidade (Semana 05)
 
-## 📸 Protótipo de Alta Fidelidade
+##  Protótipo de Alta Fidelidade
 
 Abaixo estão algumas telas ilustrativas do sistema **Checkin Room**, demonstrando a experiência do usuário durante o uso da plataforma. Cada tela foi desenvolvida com base em princípios de clareza, acessibilidade e fluidez de navegação.
 
 ---
 
-### 🔐 Tela de Login
+###  Tela de Login
 
 <div align="center">
   <sub>Tela de Login</sub><br>
@@ -402,7 +402,7 @@ Essa é a porta de entrada do sistema. Aqui, o usuário preenche seu e-mail inst
 
 ---
 
-### 🏠 Tela Home (Pós-Login)
+###  Tela Home (Pós-Login)
 
 <div align="center">
   <sub>Tela Home</sub><br>
@@ -419,7 +419,7 @@ A interface inclui também um campo de busca e ícones de menu lateral para faci
 
 ---
 
-### 📅 Tela de Reservar Salas
+###  Tela de Reservar Salas
 
 <div align="center">
   <sub>Tela de Reservar Salas</sub><br>
@@ -430,7 +430,7 @@ Esta tela apresenta uma tabela com a listagem das salas disponíveis, suas capac
 
 ---
 
-### 🗂 Tela Minhas Reservas
+###  Tela Minhas Reservas
 
 <div align="center">
   <sub>Tela Minhas Reservas</sub><br>
@@ -441,7 +441,7 @@ Aqui o usuário visualiza todas as reservas feitas por ele. Cada cartão mostra 
 
 ---
 
-### 🛠 Tela Painel do Administrador
+###  Tela Painel do Administrador
 
 <div align="center">
   <sub>Tela Painel do Administrador</sub><br>
@@ -452,7 +452,7 @@ Visível apenas para usuários com permissão de administrador. Essa tela exibe 
 
 ---
 
-### 🔗 Link do Protótipo Completo
+###  Link do Protótipo Completo
 
 [🔗 Acesse o protótipo completo no Figma](https://www.figma.com/design/2UVmkvQp59TqM8lI4yCnOM/Untitled?node-id=68-412&t=pmopyoE3rDJkOYhA-1) <!-- substitua com o link público do seu protótipo -->
 
@@ -463,7 +463,7 @@ A seguir estão descritos todos os endpoints implementados na API web do sistema
 
 ---
 
-### 🔐 Autenticação de Usuário
+###  Autenticação de Usuário
 
 #### `POST /login`
 - **Descrição**: Realiza o login de um usuário com e-mail e senha.
@@ -491,7 +491,7 @@ A seguir estão descritos todos os endpoints implementados na API web do sistema
 
 ---
 
-### 👤 Usuários
+###  Usuários
 
 #### `GET /usuarios`
 - **Descrição**: Lista todos os usuários cadastrados (uso administrativo).
@@ -503,7 +503,7 @@ A seguir estão descritos todos os endpoints implementados na API web do sistema
 
 ---
 
-### 🗓 Reservas
+###  Reservas
 
 #### `GET /reservar`
 - **Descrição**: Exibe a interface de reservas com listagem de salas e horários disponíveis.
@@ -536,7 +536,7 @@ A seguir estão descritos todos os endpoints implementados na API web do sistema
 
 ---
 
-### 🛎 Notificações
+###  Notificações
 
 #### `GET /notificacoes/:id_usuario`
 - **Descrição**: Lista todas as notificações enviadas ao usuário.
@@ -546,7 +546,7 @@ A seguir estão descritos todos os endpoints implementados na API web do sistema
 
 ---
 
-### 🧩 Extras
+###  Extras
 
 #### `GET /admin`
 - **Descrição**: Acessa o painel do administrador com todas as reservas pendentes para aprovação ou rejeição.
