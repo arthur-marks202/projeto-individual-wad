@@ -156,7 +156,7 @@ npm run init-db
 1. Inicie a aplicação com:
 
 ```bash
-node app.js
+npm start
 ```
 
 2. O servidor estará rodando em:
