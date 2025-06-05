@@ -4,127 +4,159 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Home - Checkin Room</title>
-  <link rel="stylesheet" href="/styles/home.css"> <!-- opcional -->
-  <style>
-    body {
-      background-color: #f9f9f9;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background-color: #2e2640;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 1.8rem;
-    }
-
-    .menu-icons a {
-      color: white;
-      text-decoration: none;
-      margin-left: 1rem;
-      font-size: 1.2rem;
-    }
-
-    main {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 1rem;
-    }
-
-    .welcome {
-      text-align: center;
-      margin-bottom: 2rem;
-      font-size: 1.2rem;
-    }
-
-    .menu-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-      padding: 1.5rem;
-      text-align: center;
-      transition: transform 0.2s;
-    }
-
-    .card:hover {
-      transform: scale(1.02);
-    }
-
-    .card h2 {
-      margin-top: 0;
-      color: #2e2640;
-    }
-
-    .card p {
-      margin: 0.8rem 0 1.2rem;
-      color: #444;
-    }
-
-    .card a {
-      display: inline-block;
-      padding: 0.6rem 1.2rem;
-      background-color: #2e2640;
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .card a:hover {
-      background-color: #40385c;
-    }
-  </style>
+  <link rel="stylesheet" href="/CSS/components/layout.css">
+  <link rel="stylesheet" href="/CSS/homePage/styles.css">
 </head>
 <body>
-  <header>
-    <h1>Checkin Room</h1>
-    <div class="menu-icons">
-      <a href="/notificacoes">🔔</a>
-      <a href="/logout">🚪 Sair</a>
-    </div>
-  </header>
-
-  <main>
-    <div class="welcome">
-      <p>Bem-vindo, <strong><%= usuario.nome %></strong>!</p>
-    </div>
-
-    <section class="menu-cards">
-      <div class="card">
-        <h2>Minhas Reservas</h2>
-        <p>Veja todas as reservas feitas por você.</p>
-        <a href="/reservas/<%= usuario.id %>/minhas">Acessar</a>
+  <div class="layout-container">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h1 class="sidebar-logo">Checkin Room</h1>
       </div>
-
-      <div class="card">
-        <h2>Agendar Sala</h2>
-        <p>Consulte a disponibilidade e faça uma nova reserva.</p>
-        <a href="/reservar">Reservar</a>
+      <div class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="/reservar" class="nav-link">
+              <span class="nav-icon">📅</span>
+              <span class="nav-text">Reservas</span>
+            </a>
+          </li>
+          <li>
+            <a href="/reservas/<%= usuario.id %>/minhas" class="nav-link">
+              <span class="nav-icon">📋</span>
+              <span class="nav-text">Minhas Reservas</span>
+            </a>
+          </li>
+          <% if (usuario.tipo === 'admin') { %>
+          <li>
+            <a href="/admin" class="nav-link">
+              <span class="nav-icon">⚙️</span>
+              <span class="nav-text">Painel Admin</span>
+            </a>
+          </li>
+          <% } %>
+        </ul>
       </div>
+    </nav>
 
-      <% if (usuario.tipo === 'admin') { %>
-      <div class="card">
-        <h2>Painel Administrativo</h2>
-        <p>Gerencie e aprove as reservas pendentes.</p>
-        <a href="/admin">Painel</a>
+    <!-- Topbar -->
+    <header class="topbar" id="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <span>☰</span>
+        </button>
+        <h1 class="page-title">Home</h1>
       </div>
-      <% } %>
-    </section>
-  </main>
+      <div class="topbar-right">
+        <a href="/" class="btn-logout">
+          <span>🚪</span>
+          <span>Sair</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content" id="mainContent">
+      <div class="home-container">
+        <!-- Texto de Fundo -->
+        <div class="background-text">CHECKIN ROOM</div>
+
+        <!-- Conteúdo Principal -->
+        <div class="home-content">
+          <!-- Seção de Boas-vindas -->
+          <section class="welcome-section">
+            <h1 class="welcome-title">Sistema de Reservas</h1>
+            <p class="welcome-subtitle">Inteli - Instituto de Tecnologia e Liderança</p>
+
+            <div class="user-greeting">
+              <h2>Bem-vindo, <span class="user-name"><%= usuario.nome %></span>!</h2>
+            </div>
+          </section>
+
+          <!-- Seção de Informações -->
+          <section class="info-section">
+            <div class="info-card">
+              <span class="icon">🏢</span>
+              <h3>Salas Disponíveis</h3>
+              <p>Acesse nossa variedade de salas equipadas para diferentes necessidades acadêmicas e profissionais.</p>
+            </div>
+
+            <div class="info-card">
+              <span class="icon">⏰</span>
+              <h3>Reservas Rápidas</h3>
+              <p>Sistema intuitivo para agendar salas de forma rápida e eficiente, com confirmação em tempo real.</p>
+            </div>
+
+            <div class="info-card">
+              <span class="icon">📊</span>
+              <h3>Gestão Inteligente</h3>
+              <p>Acompanhe suas reservas, histórico e estatísticas de uso através de um painel personalizado.</p>
+            </div>
+          </section>
+
+          <!-- Seção de Estatísticas -->
+          <section class="stats-section">
+            <h3 class="stats-title">Estatísticas do Sistema</h3>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <span class="stat-number">15</span>
+                <span class="stat-label">Salas Disponíveis</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">120</span>
+                <span class="stat-label">Reservas Este Mês</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">85%</span>
+                <span class="stat-label">Taxa de Ocupação</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">Disponibilidade</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Seção Admin (se aplicável) -->
+          <% if (usuario.tipo === 'admin') { %>
+          <section class="admin-section">
+            <h3>Acesso Administrativo</h3>
+            <p>Como administrador, você tem acesso completo ao painel de gestão de reservas e usuários.</p>
+            <a href="/admin" class="btn-admin">
+              <span>⚙️</span>
+              <span>Acessar Painel</span>
+            </a>
+          </section>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Funcionalidade da Sidebar
+    const sidebar = document.getElementById('sidebar');
+    const topbar = document.getElementById('topbar');
+    const mainContent = document.getElementById('mainContent');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      topbar.classList.toggle('sidebar-collapsed');
+      mainContent.classList.toggle('sidebar-collapsed');
+    });
+
+    // Marcar link ativo
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    navLinks.forEach(link => {
+      if (link.getAttribute('href') === currentPath ||
+          (currentPath === '/home' && link.getAttribute('href') === '/')) {
+        link.classList.add('active');
+      }
+    });
+  </script>
 </body>
 </html>

@@ -1,0 +1,288 @@
+/* ===== PÁGINA HOME ===== */
+
+/* ===== VARIÁVEIS CSS (GUIA DE ESTILOS) ===== */
+:root {
+  /* Cores Primárias */
+  --primary-color: #2e2640;
+  --primary-hover: #40385c;
+
+  /* Cores Secundárias */
+  --secondary-color: #E84A4A;
+  --success-color: #18A135;
+  --student-color: #3118EF;
+  --teacher-color: #8E6821;
+
+  /* Cores Neutras */
+  --neutral-dark: #3F3357;
+  --neutral-darker: #261B38;
+  --neutral-darkest: #120C1D;
+  --neutral-light: #FFFFFF;
+  --neutral-gray: #f0f2f5;
+  --neutral-border: #ccc;
+  --neutral-text: #333;
+  --neutral-text-light: #555;
+
+  /* Tipografia */
+  --font-family: 'Arial', sans-serif;
+  --font-size-base: 16px;
+  --font-size-large: 1.8rem;
+  --font-size-medium: 1.2rem;
+  --font-size-small: 0.9rem;
+
+  /* Espaçamentos */
+  --spacing-xs: 0.3rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Bordas */
+  --border-radius: 8px;
+  --border-radius-large: 12px;
+
+  /* Sombras */
+  --shadow-light: 0 0 8px rgba(0,0,0,0.1);
+  --shadow-medium: 0 0 15px rgba(0,0,0,0.1);
+  --shadow-card: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ===== LAYOUT PRINCIPAL ===== */
+.home-container {
+  padding: var(--spacing-xl);
+  min-height: calc(100vh - 70px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== TEXTO DE FUNDO ===== */
+.background-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.05);
+  z-index: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ===== CONTEÚDO PRINCIPAL ===== */
+.home-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== SEÇÃO DE BOAS-VINDAS ===== */
+.welcome-section {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-xl) 0;
+}
+
+.welcome-title {
+  font-size: var(--font-size-large);
+  color: var(--neutral-light);
+  margin-bottom: var(--spacing-md);
+  font-weight: bold;
+}
+
+.welcome-subtitle {
+  font-size: var(--font-size-medium);
+  color: var(--neutral-light);
+  opacity: 0.9;
+  margin-bottom: var(--spacing-lg);
+}
+
+.user-greeting {
+  background: var(--primary-hover);
+  border: 2px solid var(--neutral-dark);
+  border-radius: var(--border-radius-large);
+  padding: var(--spacing-lg);
+  display: inline-block;
+  margin-bottom: var(--spacing-xl);
+}
+
+.user-greeting h2 {
+  color: var(--neutral-light);
+  font-size: var(--font-size-medium);
+  margin: 0;
+}
+
+.user-name {
+  color: var(--success-color);
+  font-weight: bold;
+}
+
+/* ===== SEÇÃO DE INFORMAÇÕES ===== */
+.info-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.info-card {
+  background: var(--primary-hover);
+  border: 2px solid var(--neutral-dark);
+  border-radius: var(--border-radius-large);
+  padding: var(--spacing-xl);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+}
+
+.info-card .icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+  display: block;
+}
+
+.info-card h3 {
+  color: var(--neutral-light);
+  font-size: var(--font-size-medium);
+  margin-bottom: var(--spacing-md);
+  font-weight: bold;
+}
+
+.info-card p {
+  color: var(--neutral-light);
+  opacity: 0.9;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ===== SEÇÃO DE ESTATÍSTICAS ===== */
+.stats-section {
+  background: var(--neutral-dark);
+  border: 2px solid var(--primary-hover);
+  border-radius: var(--border-radius-large);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.stats-title {
+  color: var(--neutral-light);
+  font-size: var(--font-size-medium);
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  font-weight: bold;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.stat-item {
+  text-align: center;
+  padding: var(--spacing-md);
+  background: var(--primary-color);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--primary-hover);
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--success-color);
+  display: block;
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-label {
+  color: var(--neutral-light);
+  font-size: var(--font-size-small);
+  opacity: 0.9;
+}
+
+/* ===== SEÇÃO DE ACESSO RÁPIDO (ADMIN) ===== */
+.admin-section {
+  background: var(--secondary-color);
+  border: 2px solid #d63939;
+  border-radius: var(--border-radius-large);
+  padding: var(--spacing-xl);
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.admin-section h3 {
+  color: var(--neutral-light);
+  font-size: var(--font-size-medium);
+  margin-bottom: var(--spacing-md);
+  font-weight: bold;
+}
+
+.admin-section p {
+  color: var(--neutral-light);
+  opacity: 0.9;
+  margin-bottom: var(--spacing-lg);
+}
+
+.btn-admin {
+  background: var(--neutral-light);
+  color: var(--secondary-color);
+  border: 2px solid var(--neutral-light);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.btn-admin:hover {
+  background: transparent;
+  color: var(--neutral-light);
+  transform: translateY(-2px);
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .background-text {
+    font-size: 4rem;
+  }
+
+  .home-container {
+    padding: var(--spacing-lg);
+  }
+
+  .welcome-title {
+    font-size: 1.5rem;
+  }
+
+  .info-section {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .background-text {
+    font-size: 2.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-greeting {
+    padding: var(--spacing-md);
+  }
+}

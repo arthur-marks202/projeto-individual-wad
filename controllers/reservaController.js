@@ -30,7 +30,10 @@ exports.listarReservasPorUsuario = async (req, res) => {
   try {
     const id_usuario = req.params.id_usuario;
     const reservas = await Reserva.listarPorUsuario(id_usuario);
-    res.render('minhasReservas', { reservas });
+    res.render('minhasReservas', {
+      reservas,
+      usuario: req.session.usuario // Passando usuário da sessão
+    });
   } catch (erro) {
     console.error('Erro ao listar reservas:', erro);
     res.status(500).send('Erro ao buscar reservas do usuário.');
@@ -41,9 +44,9 @@ exports.listarReservasPorUsuario = async (req, res) => {
 exports.listarTodasReservas = async (req, res) => {
   try {
     const reservasPendentes = await Reserva.listarTodasComJoin();
-    res.render('adminDashboard', {
+    res.render('adminDashboard_new', {
       reservasPendentes,
-      mensagemSucesso: null  // ✅ Adicione esta linha
+      mensagemSucesso: null
     });
   } catch (erro) {
     console.error('Erro ao listar reservas:', erro);
@@ -63,7 +66,7 @@ exports.aprovarReserva = async (req, res) => {
 
     // Recarrega a tela com nova lista
     const reservasPendentes = await Reserva.listarTodasComJoin();
-    res.render('adminDashboard', {
+    res.render('adminDashboard_new', {
       reservasPendentes,
       mensagemSucesso: 'Reserva aprovada com sucesso!'
     });
@@ -80,7 +83,7 @@ exports.cancelarReserva = async (req, res) => {
     await Reserva.atualizarStatus(id, 'cancelada');
 
     const reservasPendentes = await Reserva.listarTodasComJoin();
-    res.render('adminDashboard', {
+    res.render('adminDashboard_new', {
       reservasPendentes,
       mensagemSucesso: 'Reserva cancelada com sucesso!'
     });

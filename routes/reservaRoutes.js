@@ -9,7 +9,11 @@ const Reserva = require('../repositories/reservaRepository');
 router.get('/reservar', async (req, res) => {
   try {
     const salas = await Sala.listarTodas();
-    res.render('reservar', { salas, mensagemErro: null });
+    res.render('reservar', {
+      salas,
+      mensagemErro: null,
+      req: req // Passando req para acessar session
+    });
   } catch (erro) {
     console.error('Erro ao carregar salas:', erro);
     res.status(500).send('Erro ao carregar salas.');
@@ -28,18 +32,23 @@ router.post('/reservar/confirmar', async (req, res) => {
       const salas = await Sala.listarTodas();
       return res.render('reservar', {
         salas,
-        mensagemErro: 'Horário indisponível para esta sala.'
+        mensagemErro: 'Horário indisponível para esta sala.',
+        req: req
       });
     }
 
-    // Cria a nova reserva com status "pendente"
+    // Determinar status baseado no tipo de usuário
+    const tipoUsuario = req.session.usuario.tipo;
+    const statusReserva = tipoUsuario === 'professor' ? 'aprovada' : 'pendente';
+
+    // Cria a nova reserva
     await Reserva.criar({
       id_usuario,
       id_sala,
       data_reserva,
       horario_inicio,
       horario_fim,
-      status_reserva: 'pendente'
+      status_reserva: statusReserva
     });
 
     res.redirect(`/reservas/${id_usuario}/minhas`);

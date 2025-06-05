@@ -4,106 +4,324 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Reservar Sala - Checkin Room</title>
-  <link rel="stylesheet" href="/styles/reservar.css">
-  <style>
-    body {
-      background-color: #f9f9f9;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 2rem;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 2rem;
-      color: #2e2640;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
-
-    th, td {
-      padding: 1rem;
-      text-align: center;
-      border-bottom: 1px solid #eee;
-    }
-
-    th {
-      background-color: #2e2640;
-      color: white;
-    }
-
-    input[type="date"],
-    input[type="time"] {
-      padding: 0.4rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      width: 100%;
-    }
-
-    button {
-      padding: 0.5rem 1rem;
-      background-color: #2e2640;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #40385c;
-    }
-
-    .erro {
-      color: red;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-  </style>
+  <link rel="stylesheet" href="/CSS/components/layout.css">
+  <link rel="stylesheet" href="/CSS/reservar/styles.css">
 </head>
 <body>
-  <h1>Reservar Sala</h1>
+  <div class="layout-container">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h1 class="sidebar-logo">Checkin Room</h1>
+      </div>
+      <div class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="/home" class="nav-link">
+              <span class="nav-icon">🏠</span>
+              <span class="nav-text">Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="/reservar" class="nav-link active">
+              <span class="nav-icon">📅</span>
+              <span class="nav-text">Reservas</span>
+            </a>
+          </li>
+          <li>
+            <a href="/reservas/<%= req.session.usuario.id %>/minhas" class="nav-link">
+              <span class="nav-icon">📋</span>
+              <span class="nav-text">Minhas Reservas</span>
+            </a>
+          </li>
+          <% if (req.session.usuario.tipo === 'admin') { %>
+          <li>
+            <a href="/admin" class="nav-link">
+              <span class="nav-icon">⚙️</span>
+              <span class="nav-text">Painel Admin</span>
+            </a>
+          </li>
+          <% } %>
+        </ul>
+      </div>
+    </nav>
 
-  <% if (mensagemErro) { %>
-    <p class="erro"><%= mensagemErro %></p>
-  <% } %>
+    <!-- Topbar -->
+    <header class="topbar" id="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <span>☰</span>
+        </button>
+        <h1 class="page-title">Reservar Sala</h1>
+      </div>
+      <div class="topbar-right">
+        <a href="/" class="btn-logout">
+          <span>🚪</span>
+          <span>Sair</span>
+        </a>
+      </div>
+    </header>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Nome da Sala</th>
-        <th>Andar</th>
-        <th>Capacidade</th>
-        <th>Data</th>
-        <th>Início</th>
-        <th>Fim</th>
-        <th>Ação</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% salas.forEach(sala => { %>
-        <tr>
-          <form action="/reservar/confirmar" method="POST">
-            <td><%= sala.nome %></td>
-            <td><%= sala.localizacao %></td>
-            <td><%= sala.capacidade %> pessoas</td>
-            <td>
-              <input type="hidden" name="id_sala" value="<%= sala.id_sala %>">
-              <input type="date" name="data_reserva" required>
-            </td>
-            <td><input type="time" name="horario_inicio" required></td>
-            <td><input type="time" name="horario_fim" required></td>
-            <td><button type="submit">Agendar</button></td>
-          </form>
-        </tr>
-      <% }) %>
-    </tbody>
-  </table>
+    <!-- Conteúdo Principal -->
+    <main class="main-content" id="mainContent">
+      <div class="reservar-container">
+        <!-- Header da Página -->
+        <div class="page-header">
+          <h1>Reservar Sala</h1>
+          <p>Selecione uma sala e defina o horário para sua reserva</p>
+        </div>
+
+        <!-- Mensagens de Feedback -->
+        <% if (mensagemErro) { %>
+          <div class="message erro"><%= mensagemErro %></div>
+        <% } %>
+
+        <!-- Seção da Tabela -->
+        <section class="table-section">
+          <div class="table-header">
+            <h2 class="table-title">Salas Disponíveis</h2>
+          </div>
+
+          <% if (salas && salas.length > 0) { %>
+            <table class="salas-table" id="salasTable">
+              <thead>
+                <tr>
+                  <th>Sala</th>
+                  <th>Andar</th>
+                  <th>Capacidade</th>
+                  <th>Data</th>
+                  <th>Horário Início</th>
+                  <th>Horário Fim</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% salas.forEach((sala, index) => { %>
+                  <tr>
+                    <form action="/reservar/confirmar" method="POST" class="reserva-form" data-form-index="<%= index %>">
+                      <td>
+                        <div class="sala-info">
+                          <span class="sala-nome"><%= sala.nome %></span>
+                          <span class="sala-detalhes"><%= sala.localizacao %></span>
+                        </div>
+                      </td>
+                      <td><%= sala.localizacao %></td>
+                      <td><%= sala.capacidade %> pessoas</td>
+                      <td>
+                        <input type="hidden" name="id_sala" value="<%= sala.id_sala %>">
+                        <input
+                          type="date"
+                          name="data_reserva"
+                          class="form-input date-input"
+                          data-form-index="<%= index %>"
+                          required
+                        >
+                        <div class="validation-alert" id="dateAlert<%= index %>">
+                          Não é possível reservar aos finais de semana
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          type="time"
+                          name="horario_inicio"
+                          class="form-input time-input"
+                          data-form-index="<%= index %>"
+                          step="3600"
+                          required
+                        >
+                        <div class="validation-alert" id="timeStartAlert<%= index %>">
+                          Horário deve ser entre 06:00 e 21:00
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          type="time"
+                          name="horario_fim"
+                          class="form-input time-input"
+                          data-form-index="<%= index %>"
+                          step="3600"
+                          required
+                        >
+                        <div class="validation-alert" id="timeEndAlert<%= index %>">
+                          Horário deve ser entre 06:00 e 21:00
+                        </div>
+                      </td>
+                      <td>
+                        <button type="submit" class="btn-agendar" data-form-index="<%= index %>">
+                          Agendar
+                        </button>
+                      </td>
+                    </form>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <div class="empty-state">
+              <div class="icon">🏢</div>
+              <h3>Nenhuma sala disponível</h3>
+              <p>No momento não há salas disponíveis para reserva.</p>
+            </div>
+          <% } %>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // ===== FUNCIONALIDADE DA SIDEBAR =====
+    const sidebar = document.getElementById('sidebar');
+    const topbar = document.getElementById('topbar');
+    const mainContent = document.getElementById('mainContent');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      topbar.classList.toggle('sidebar-collapsed');
+      mainContent.classList.toggle('sidebar-collapsed');
+    });
+
+    // ===== VALIDAÇÕES DE DATA E HORÁRIO =====
+
+    // Função para validar se é final de semana
+    function isWeekend(date) {
+      const day = date.getDay();
+      return day === 0 || day === 6; // 0 = Domingo, 6 = Sábado
+    }
+
+    // Função para validar horário (06:00 às 21:00)
+    function isValidTime(time) {
+      const [hours, minutes] = time.split(':').map(Number);
+      const timeInMinutes = hours * 60 + minutes;
+      const startTime = 6 * 60; // 06:00
+      const endTime = 21 * 60;  // 21:00
+
+      return timeInMinutes >= startTime && timeInMinutes <= endTime;
+    }
+
+    // Função para mostrar/ocultar alertas de validação
+    function showValidationAlert(alertId, show = true) {
+      const alert = document.getElementById(alertId);
+      if (alert) {
+        alert.classList.toggle('show', show);
+      }
+    }
+
+    // Função para validar formulário
+    function validateForm(formIndex) {
+      let isValid = true;
+
+      // Validar data
+      const dateInput = document.querySelector(`input[name="data_reserva"][data-form-index="${formIndex}"]`);
+      if (dateInput && dateInput.value) {
+        const selectedDate = new Date(dateInput.value + 'T00:00:00');
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (selectedDate < today) {
+          showValidationAlert(`dateAlert${formIndex}`, true);
+          dateInput.style.borderColor = 'var(--secondary-color)';
+          isValid = false;
+        } else if (isWeekend(selectedDate)) {
+          showValidationAlert(`dateAlert${formIndex}`, true);
+          dateInput.style.borderColor = 'var(--secondary-color)';
+          isValid = false;
+        } else {
+          showValidationAlert(`dateAlert${formIndex}`, false);
+          dateInput.style.borderColor = 'var(--success-color)';
+        }
+      }
+
+      // Validar horário de início
+      const startTimeInput = document.querySelector(`input[name="horario_inicio"][data-form-index="${formIndex}"]`);
+      if (startTimeInput && startTimeInput.value) {
+        if (!isValidTime(startTimeInput.value)) {
+          showValidationAlert(`timeStartAlert${formIndex}`, true);
+          startTimeInput.style.borderColor = 'var(--secondary-color)';
+          isValid = false;
+        } else {
+          showValidationAlert(`timeStartAlert${formIndex}`, false);
+          startTimeInput.style.borderColor = 'var(--success-color)';
+        }
+      }
+
+      // Validar horário de fim
+      const endTimeInput = document.querySelector(`input[name="horario_fim"][data-form-index="${formIndex}"]`);
+      if (endTimeInput && endTimeInput.value) {
+        if (!isValidTime(endTimeInput.value)) {
+          showValidationAlert(`timeEndAlert${formIndex}`, true);
+          endTimeInput.style.borderColor = 'var(--secondary-color)';
+          isValid = false;
+        } else {
+          showValidationAlert(`timeEndAlert${formIndex}`, false);
+          endTimeInput.style.borderColor = 'var(--success-color)';
+        }
+      }
+
+      // Validar se horário de fim é posterior ao de início
+      if (startTimeInput && endTimeInput && startTimeInput.value && endTimeInput.value) {
+        const startTime = startTimeInput.value;
+        const endTime = endTimeInput.value;
+
+        if (endTime <= startTime) {
+          showValidationAlert(`timeEndAlert${formIndex}`, true);
+          endTimeInput.style.borderColor = 'var(--secondary-color)';
+          document.getElementById(`timeEndAlert${formIndex}`).textContent = 'Horário de fim deve ser posterior ao de início';
+          isValid = false;
+        }
+      }
+
+      // Atualizar estado do botão
+      const submitButton = document.querySelector(`button[data-form-index="${formIndex}"]`);
+      if (submitButton) {
+        submitButton.disabled = !isValid;
+      }
+
+      return isValid;
+    }
+
+    // ===== EVENT LISTENERS =====
+
+    // Configurar data mínima (hoje)
+    const today = new Date().toISOString().split('T')[0];
+    document.querySelectorAll('.date-input').forEach(input => {
+      input.min = today;
+
+      input.addEventListener('change', (e) => {
+        const formIndex = e.target.dataset.formIndex;
+        validateForm(formIndex);
+      });
+    });
+
+    // Configurar validação de horários
+    document.querySelectorAll('.time-input').forEach(input => {
+      input.addEventListener('change', (e) => {
+        const formIndex = e.target.dataset.formIndex;
+        validateForm(formIndex);
+      });
+    });
+
+    // Validar formulários antes do envio
+    document.querySelectorAll('.reserva-form').forEach(form => {
+      form.addEventListener('submit', (e) => {
+        const formIndex = form.dataset.formIndex;
+        if (!validateForm(formIndex)) {
+          e.preventDefault();
+          alert('Por favor, corrija os erros no formulário antes de continuar.');
+        }
+      });
+    });
+
+    // ===== INICIALIZAÇÃO =====
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Página de reservas carregada com sucesso!');
+
+      // Validar todos os formulários inicialmente
+      document.querySelectorAll('.reserva-form').forEach(form => {
+        const formIndex = form.dataset.formIndex;
+        validateForm(formIndex);
+      });
+    });
+  </script>
 </body>
 </html>

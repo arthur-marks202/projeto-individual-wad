@@ -13,6 +13,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json()); // Suporte a JSON
 app.use(express.urlencoded({ extended: true })); // Suporte a formulários
 
+// Servir arquivos estáticos (CSS, imagens, etc.)
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Configuração de sessão (antes das rotas)
 app.use(session({
   secret: 'checkin-room-seguro',

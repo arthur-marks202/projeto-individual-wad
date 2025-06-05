@@ -1,0 +1,505 @@
+/* ===== RESET E CONFIGURAÇÕES GLOBAIS ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== VARIÁVEIS CSS (GUIA DE ESTILOS) ===== */
+:root {
+  /* Cores Primárias */
+  --primary-color: #2e2640;
+  --primary-hover: #40385c;
+
+  /* Cores Secundárias */
+  --secondary-color: #E84A4A;
+  --success-color: #18A135;
+  --student-color: #3118EF;
+  --teacher-color: #8E6821;
+
+  /* Cores Neutras */
+  --neutral-dark: #3F3357;
+  --neutral-darker: #261B38;
+  --neutral-darkest: #120C1D;
+  --neutral-light: #FFFFFF;
+  --neutral-gray: #f0f2f5;
+  --neutral-border: #ccc;
+  --neutral-text: #333;
+  --neutral-text-light: #555;
+
+  /* Tipografia */
+  --font-family: 'Arial', sans-serif;
+  --font-size-base: 16px;
+  --font-size-large: 1.8rem;
+  --font-size-medium: 1.2rem;
+  --font-size-small: 0.9rem;
+
+  /* Espaçamentos */
+  --spacing-xs: 0.3rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Bordas */
+  --border-radius: 8px;
+  --border-radius-large: 12px;
+
+  /* Sombras */
+  --shadow-light: 0 0 8px rgba(0,0,0,0.1);
+  --shadow-medium: 0 0 15px rgba(0,0,0,0.1);
+  --shadow-card: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ===== LAYOUT PRINCIPAL ===== */
+body {
+  background: linear-gradient(135deg, var(--neutral-gray) 0%, #e8eaf0 100%);
+  font-family: var(--font-family);
+  min-height: 100vh;
+  color: var(--neutral-text);
+}
+
+/* ===== HEADER ===== */
+.dashboard-header {
+  background: var(--neutral-light);
+  box-shadow: var(--shadow-light);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.dashboard-header h1 {
+  color: var(--primary-color);
+  font-size: var(--font-size-large);
+  text-align: center;
+  margin: 0;
+  font-weight: bold;
+}
+
+.dashboard-subtitle {
+  text-align: center;
+  color: var(--neutral-text-light);
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-size-medium);
+}
+
+/* ===== CONTAINER PRINCIPAL ===== */
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+}
+
+/* ===== SEÇÃO DE FILTROS ===== */
+.filters-section {
+  background: var(--neutral-light);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-card);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.filters-title {
+  color: var(--primary-color);
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+  margin: 0;
+}
+
+.filter-toggle-btn {
+  background: var(--primary-color);
+  color: var(--neutral-light);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.filter-toggle-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.filter-toggle-btn .icon {
+  font-size: 1.1em;
+}
+
+/* ===== FORMULÁRIO DE FILTROS ===== */
+.filters-form {
+  display: none;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid #eee;
+}
+
+.filters-form.active {
+  display: grid;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-weight: 500;
+  color: var(--neutral-text);
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-small);
+}
+
+.filter-group input,
+.filter-group select {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--neutral-text);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  transition: border-color 0.3s ease;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(46, 38, 64, 0.1);
+}
+
+/* ===== BOTÕES DE AÇÃO DOS FILTROS ===== */
+.filters-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+  margin-top: var(--spacing-md);
+}
+
+.btn-filter {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-apply {
+  background: var(--success-color);
+  color: var(--neutral-light);
+}
+
+.btn-apply:hover {
+  background: #20a03a;
+  transform: translateY(-1px);
+}
+
+.btn-clear {
+  background: var(--neutral-border);
+  color: var(--neutral-text);
+}
+
+.btn-clear:hover {
+  background: #bbb;
+  transform: translateY(-1px);
+}
+
+/* ===== MENSAGENS DE FEEDBACK ===== */
+.message {
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  font-weight: 500;
+}
+
+.message.sucesso {
+  background-color: #e8f5e8;
+  color: var(--success-color);
+  border: 1px solid #c8e6c9;
+}
+
+.message.erro {
+  background-color: #ffeaea;
+  color: var(--secondary-color);
+  border: 1px solid #ffcdd2;
+}
+
+/* ===== SEÇÃO DA TABELA ===== */
+.table-section {
+  background: var(--neutral-light);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.table-header {
+  background: var(--primary-color);
+  color: var(--neutral-light);
+  padding: var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-title {
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+  margin: 0;
+}
+
+.table-count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-small);
+}
+
+/* ===== TABELA ===== */
+.reservas-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--neutral-light);
+}
+
+.reservas-table th {
+  background: var(--neutral-darker);
+  color: var(--neutral-light);
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  font-size: var(--font-size-small);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reservas-table td {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.reservas-table tbody tr:hover {
+  background: rgba(46, 38, 64, 0.05);
+}
+
+/* ===== BADGES DE STATUS ===== */
+.user-type-badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-small);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.user-type-badge.aluno {
+  background: rgba(49, 24, 239, 0.1);
+  color: var(--student-color);
+  border: 1px solid rgba(49, 24, 239, 0.2);
+}
+
+.user-type-badge.professor {
+  background: rgba(142, 104, 33, 0.1);
+  color: var(--teacher-color);
+  border: 1px solid rgba(142, 104, 33, 0.2);
+}
+
+.user-type-badge.admin {
+  background: rgba(232, 74, 74, 0.1);
+  color: var(--secondary-color);
+  border: 1px solid rgba(232, 74, 74, 0.2);
+}
+
+/* ===== INFORMAÇÕES DA SALA ===== */
+.sala-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.sala-nome {
+  font-weight: 600;
+  color: var(--neutral-text);
+}
+
+.sala-capacidade {
+  font-size: var(--font-size-small);
+  color: var(--neutral-text);
+  opacity: 0.8;
+}
+
+/* ===== INFORMAÇÕES DE HORÁRIO ===== */
+.horario-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.horario-data {
+  font-weight: 500;
+  color: var(--neutral-text);
+}
+
+.horario-periodo {
+  font-size: var(--font-size-small);
+  color: var(--neutral-text);
+  opacity: 0.8;
+}
+
+/* ===== BOTÕES DE AÇÃO ===== */
+.actions-cell {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+}
+
+.btn-action {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: var(--font-size-small);
+  min-width: 80px;
+}
+
+.btn-aprovar {
+  background: var(--success-color);
+  color: var(--neutral-light);
+}
+
+.btn-aprovar:hover {
+  background: #20a03a;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(24, 161, 53, 0.3);
+}
+
+.btn-cancelar {
+  background: var(--secondary-color);
+  color: var(--neutral-light);
+}
+
+.btn-cancelar:hover {
+  background: #d63939;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(232, 74, 74, 0.3);
+}
+
+/* ===== BADGES DE PRIORIDADE ===== */
+.priority-badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid;
+  min-width: 80px;
+  text-align: center;
+}
+
+.priority-badge.aluno {
+  background: var(--student-color);
+  color: var(--neutral-light);
+  border-color: var(--student-color);
+}
+
+.priority-badge.professor {
+  background: var(--teacher-color);
+  color: var(--neutral-light);
+  border-color: var(--teacher-color);
+}
+
+/* ===== ESTADO VAZIO ===== */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--neutral-text);
+}
+
+.empty-state .icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.7;
+}
+
+.empty-state h3 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--neutral-text);
+}
+
+.empty-state p {
+  color: var(--neutral-text);
+  opacity: 0.8;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 1200px) {
+  .dashboard-container {
+    padding: 0 var(--spacing-lg);
+  }
+
+  .filters-form {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    padding: var(--spacing-md);
+  }
+
+  .dashboard-container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .filters-form {
+    grid-template-columns: 1fr;
+  }
+
+  .filters-header {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: stretch;
+  }
+
+  .table-section {
+    overflow-x: auto;
+  }
+
+  .reservas-table {
+    min-width: 800px;
+  }
+
+  .actions-cell {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .filters-actions {
+    flex-direction: column;
+  }
+
+  .btn-filter {
+    width: 100%;
+  }
+}

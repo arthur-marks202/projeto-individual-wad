@@ -28,11 +28,12 @@ const ReservaRepository = {
   // Lista todas as reservas do sistema (usado por administradores)
   async listarTodasComJoin() {
     const result = await db.query(
-      `SELECT r.*, u.nome AS usuario_nome, u.email, s.nome AS sala_nome, s.capacidade, s.localizacao
+      `SELECT r.*, u.nome AS usuario_nome, u.email, u.tipo_usuario, s.nome AS sala_nome, s.capacidade, s.localizacao
        FROM reserva r
        JOIN usuario u ON r.id_usuario = u.id_usuario
        JOIN sala s ON r.id_sala = s.id_sala
-       ORDER BY r.data_reserva DESC, r.horario_inicio ASC`
+       WHERE r.status_reserva = 'pendente'
+       ORDER BY r.data_reserva ASC, r.horario_inicio ASC`
     );
     return result.rows;
   },

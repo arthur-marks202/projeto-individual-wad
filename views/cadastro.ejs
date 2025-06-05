@@ -4,138 +4,105 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cadastro - Checkin Room</title>
-  <link rel="stylesheet" href="/styles/cadastro.css"> <!-- opcional -->
-  <style>
-    body {
-      background-color: #f0f2f5;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .cadastro-box {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 450px;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      color: #333;
-    }
-
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.3rem;
-      color: #555;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-
-    .tipo-usuario {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 1rem;
-    }
-
-    .tipo-usuario label {
-      flex: 1;
-      text-align: center;
-    }
-
-    button {
-      width: 100%;
-      padding: 0.8rem;
-      background-color: #2e2640;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      margin-top: 1rem;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #40385c;
-    }
-
-    .link-voltar {
-      text-align: center;
-      margin-top: 1rem;
-    }
-
-    .erro {
-      color: red;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    .sucesso {
-      color: green;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-  </style>
+  <link rel="stylesheet" href="/CSS/cadastro/styles.css">
 </head>
 <body>
-  <div class="cadastro-box">
-    <h1>Crie sua Conta</h1>
+  <a href="/home" class="btn-home">
+    <span>🏠</span>
+    <span>Home</span>
+  </a>
 
-    <% if (mensagemErro) { %>
-      <p class="erro"><%= mensagemErro %></p>
-    <% } %>
+  <div class="cadastro-container">
+    <!-- Seção da Imagem -->
+    <div class="cadastro-image">
+      <div class="cadastro-image-content">
+        <h2>Junte-se ao Checkin Room</h2>
+        <p>Crie sua conta e comece a reservar<br>salas de forma simples e eficiente</p>
+      </div>
+    </div>
 
-    <% if (mensagemSucesso) { %>
-      <p class="sucesso"><%= mensagemSucesso %></p>
-    <% } %>
-
-    <form action="/usuarios" method="POST">
-      <div class="form-group">
-        <label for="nome">Nome completo</label>
-        <input type="text" name="nome" id="nome" required>
+    <!-- Seção do Formulário -->
+    <div class="cadastro-form">
+      <div class="cadastro-header">
+        <h1>Crie sua Conta</h1>
+        <p>Preencha os dados para se cadastrar</p>
       </div>
 
-      <div class="form-group">
-        <label for="email">Email institucional</label>
-        <input type="email" name="email" id="email" required>
-      </div>
+      <!-- Mensagens de Feedback -->
+      <% if (mensagemErro) { %>
+        <div class="message erro"><%= mensagemErro %></div>
+      <% } %>
 
-      <div class="form-group">
-        <label for="senha">Senha</label>
-        <input type="password" name="senha" id="senha" required>
-      </div>
+      <% if (mensagemSucesso) { %>
+        <div class="message sucesso"><%= mensagemSucesso %></div>
+      <% } %>
 
-      <div class="form-group">
-        <label>Tipo de usuário</label>
-        <div class="tipo-usuario">
-          <label><input type="radio" name="tipo_usuario" value="aluno" required> Aluno</label>
-          <label><input type="radio" name="tipo_usuario" value="professor"> Professor</label>
-          <label><input type="radio" name="tipo_usuario" value="admin"> Admin</label>
+      <!-- Formulário de Cadastro -->
+      <form action="/usuarios" method="POST">
+        <div class="form-group">
+          <label for="nome">Nome completo</label>
+          <input
+            type="text"
+            name="nome"
+            id="nome"
+            placeholder="Digite seu nome completo"
+            required
+          >
         </div>
+
+        <div class="form-group">
+          <label for="email">Email institucional</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="seuemail@sou.inteli.edu.br"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input
+            type="password"
+            name="senha"
+            id="senha"
+            placeholder="Digite uma senha segura"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Tipo de usuário</label>
+          <div class="tipo-usuario">
+            <div class="tipo-usuario-option aluno">
+              <label>
+                <input type="radio" name="tipo_usuario" value="aluno" required>
+                Aluno
+              </label>
+            </div>
+            <div class="tipo-usuario-option professor">
+              <label>
+                <input type="radio" name="tipo_usuario" value="professor">
+                Professor
+              </label>
+            </div>
+            <div class="tipo-usuario-option admin">
+              <label>
+                <input type="radio" name="tipo_usuario" value="admin">
+                Admin
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Cadastrar</button>
+      </form>
+
+      <!-- Link para Voltar -->
+      <div class="link-voltar">
+        <p>Já tem conta? <a href="/">Faça login</a></p>
       </div>
-
-      <button type="submit">Cadastrar</button>
-    </form>
-
-    <div class="link-voltar">
-      <p>Já tem conta? <a href="/">Faça login</a></p>
     </div>
   </div>
 </body>

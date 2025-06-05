@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo - Checkin Room</title>
+  <link rel="stylesheet" href="/CSS/components/layout.css">
+  <link rel="stylesheet" href="/CSS/Dashboard/styles.css">
+</head>
+<body>
+  <div class="layout-container">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h1 class="sidebar-logo">Checkin Room</h1>
+      </div>
+      <div class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="/home" class="nav-link">
+              <span class="nav-icon">🏠</span>
+              <span class="nav-text">Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="/reservar" class="nav-link">
+              <span class="nav-icon">📅</span>
+              <span class="nav-text">Reservas</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" onclick="goToMyReservations()">
+              <span class="nav-icon">📋</span>
+              <span class="nav-text">Minhas Reservas</span>
+            </a>
+          </li>
+          <li>
+            <a href="/admin" class="nav-link active">
+              <span class="nav-icon">⚙️</span>
+              <span class="nav-text">Painel Admin</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Topbar -->
+    <header class="topbar" id="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <span>☰</span>
+        </button>
+        <h1 class="page-title">Painel Administrativo</h1>
+      </div>
+      <div class="topbar-right">
+        <a href="/" class="btn-logout">
+          <span>🚪</span>
+          <span>Sair</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content" id="mainContent">
+      <div class="dashboard-container">
+        <!-- Mensagem de Feedback -->
+        <% if (mensagemSucesso) { %>
+          <div class="message sucesso"><%= mensagemSucesso %></div>
+        <% } %>
+
+        <!-- Seção da Tabela -->
+        <section class="table-section">
+          <div class="table-header">
+            <h2 class="table-title">Reservas Pendentes</h2>
+            <span class="table-count" id="reservasCount"><%= reservasPendentes.length %> reserva(s)</span>
+          </div>
+
+          <% if (reservasPendentes.length > 0) { %>
+            <table class="reservas-table" id="reservasTable">
+              <thead>
+                <tr>
+                  <th>Sala</th>
+                  <th>Horários de Reserva</th>
+                  <th>Nome do Usuário</th>
+                  <th>Prioridade</th>
+                  <th>Aprovação</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% reservasPendentes.forEach(reserva => { %>
+                  <tr>
+                    <td>
+                      <div class="sala-info">
+                        <span class="sala-nome"><%= reserva.sala_nome %></span>
+                        <span class="sala-capacidade"><%= reserva.capacidade %> pessoas</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="horario-info">
+                        <span class="horario-data"><%= new Date(reserva.data_reserva).toLocaleDateString('pt-BR') %></span>
+                        <span class="horario-periodo"><%= reserva.horario_inicio.slice(0,5) %> às <%= reserva.horario_fim.slice(0,5) %></span>
+                      </div>
+                    </td>
+                    <td><%= reserva.usuario_nome %></td>
+                    <td>
+                      <% if (reserva.tipo_usuario === 'aluno') { %>
+                        <span class="priority-badge aluno">Aluno</span>
+                      <% } else if (reserva.tipo_usuario === 'professor') { %>
+                        <span class="priority-badge professor">Professor</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <div class="approval-cell" data-reserva-id="<%= reserva.id_reserva %>">
+                        <div class="actions-cell">
+                          <button class="btn-action btn-aprovar" data-id="<%= reserva.id_reserva %>">
+                            Aprovar
+                          </button>
+                          <button class="btn-action btn-cancelar" data-id="<%= reserva.id_reserva %>">
+                            Cancelar
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <div class="empty-state">
+              <div class="icon">📋</div>
+              <h3>Nenhuma reserva pendente</h3>
+              <p>Todas as reservas foram processadas ou não há novas solicitações.</p>
+            </div>
+          <% } %>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Funcionalidade da Sidebar
+    const sidebar = document.getElementById('sidebar');
+    const topbar = document.getElementById('topbar');
+    const mainContent = document.getElementById('mainContent');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      topbar.classList.toggle('sidebar-collapsed');
+      mainContent.classList.toggle('sidebar-collapsed');
+    });
+
+    // Função para navegar para minhas reservas
+    function goToMyReservations() {
+      window.location.href = '/reservas/1/minhas';
+    }
+
+    // Função para atualizar contador de reservas
+    function updateReservasCount() {
+      const tableBody = document.querySelector('#reservasTable tbody');
+      const count = tableBody ? tableBody.children.length : 0;
+      const countElement = document.getElementById('reservasCount');
+      if (countElement) {
+        countElement.textContent = `${count} reserva(s)`;
+      }
+
+      // Se não há mais reservas, mostrar estado vazio
+      if (count === 0) {
+        const tableSection = document.querySelector('.table-section');
+        tableSection.innerHTML = `
+          <div class="table-header">
+            <h2 class="table-title">Reservas Pendentes</h2>
+            <span class="table-count">0 reserva(s)</span>
+          </div>
+          <div class="empty-state">
+            <div class="icon">📋</div>
+            <h3>Nenhuma reserva pendente</h3>
+            <p>Todas as reservas foram processadas ou não há novas solicitações.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Aprovar reserva
+    document.querySelectorAll('.btn-aprovar').forEach(button => {
+      button.addEventListener('click', async () => {
+        const id = button.getAttribute('data-id');
+
+        if (!confirm('Tem certeza que deseja aprovar esta reserva?')) {
+          return;
+        }
+
+        try {
+          button.disabled = true;
+          button.textContent = 'Aprovando...';
+
+          const response = await fetch(`/reservas/${id}/aprovar`, { method: 'PUT' });
+          if (response.ok) {
+            // Atualizar interface sem recarregar página
+            const approvalCell = button.closest('.approval-cell');
+            approvalCell.innerHTML = '<span class="status-badge aprovada">Aprovada</span>';
+
+            // Remover linha da tabela após 2 segundos
+            setTimeout(() => {
+              const row = button.closest('tr');
+              row.style.transition = 'opacity 0.5s ease';
+              row.style.opacity = '0';
+              setTimeout(() => {
+                row.remove();
+                updateReservasCount();
+              }, 500);
+            }, 2000);
+          } else {
+            alert('Erro ao aprovar reserva.');
+            button.disabled = false;
+            button.textContent = 'Aprovar';
+          }
+        } catch (error) {
+          console.error('Erro:', error);
+          alert('Erro inesperado.');
+          button.disabled = false;
+          button.textContent = 'Aprovar';
+        }
+      });
+    });
+
+    // Cancelar reserva
+    document.querySelectorAll('.btn-cancelar').forEach(button => {
+      button.addEventListener('click', async () => {
+        const id = button.getAttribute('data-id');
+
+        if (!confirm('Tem certeza que deseja cancelar esta reserva?')) {
+          return;
+        }
+
+        try {
+          button.disabled = true;
+          button.textContent = 'Cancelando...';
+
+          const response = await fetch(`/reservas/${id}/cancelar`, { method: 'PUT' });
+          if (response.ok) {
+            // Atualizar interface sem recarregar página
+            const approvalCell = button.closest('.approval-cell');
+            approvalCell.innerHTML = '<span class="status-badge cancelada">Cancelada</span>';
+
+            // Remover linha da tabela após 2 segundos
+            setTimeout(() => {
+              const row = button.closest('tr');
+              row.style.transition = 'opacity 0.5s ease';
+              row.style.opacity = '0';
+              setTimeout(() => {
+                row.remove();
+                updateReservasCount();
+              }, 500);
+            }, 2000);
+          } else {
+            alert('Erro ao cancelar reserva.');
+            button.disabled = false;
+            button.textContent = 'Cancelar';
+          }
+        } catch (error) {
+          console.error('Erro:', error);
+          alert('Erro inesperado.');
+          button.disabled = false;
+          button.textContent = 'Cancelar';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

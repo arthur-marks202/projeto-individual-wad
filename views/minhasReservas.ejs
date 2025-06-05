@@ -4,102 +4,287 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Minhas Reservas - Checkin Room</title>
-  <link rel="stylesheet" href="/styles/minhasReservas.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      margin: 0;
-      padding: 2rem;
-    }
-
-    h1 {
-      text-align: center;
-      color: #2e2640;
-      margin-bottom: 2rem;
-    }
-
-    table {
-      width: 100%;
-      background-color: white;
-      border-collapse: collapse;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    th, td {
-      padding: 1rem;
-      text-align: center;
-      border-bottom: 1px solid #eee;
-    }
-
-    th {
-      background-color: #2e2640;
-      color: white;
-    }
-
-    .cancelar-btn {
-      padding: 0.4rem 0.8rem;
-      background-color: #d90429;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .cancelar-btn:hover {
-      background-color: #b10323;
-    }
-
-    .mensagem {
-      text-align: center;
-      font-size: 1.1rem;
-      color: #444;
-      margin-top: 2rem;
-    }
-  </style>
+  <link rel="stylesheet" href="/CSS/components/layout.css">
+  <link rel="stylesheet" href="/CSS/minhasReservas/styles.css">
 </head>
 <body>
-  <h1>Minhas Reservas</h1>
+  <div class="layout-container">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h1 class="sidebar-logo">Checkin Room</h1>
+      </div>
+      <div class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="/home" class="nav-link">
+              <span class="nav-icon">🏠</span>
+              <span class="nav-text">Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="/reservar" class="nav-link">
+              <span class="nav-icon">📅</span>
+              <span class="nav-text">Reservas</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link active">
+              <span class="nav-icon">📋</span>
+              <span class="nav-text">Minhas Reservas</span>
+            </a>
+          </li>
+          <% if (usuario && usuario.tipo === 'admin') { %>
+          <li>
+            <a href="/admin" class="nav-link">
+              <span class="nav-icon">⚙️</span>
+              <span class="nav-text">Painel Admin</span>
+            </a>
+          </li>
+          <% } %>
+        </ul>
+      </div>
+    </nav>
 
-  <% if (reservas.length === 0) { %>
-    <p class="mensagem">Você ainda não fez nenhuma reserva.</p>
-  <% } else { %>
-    <table>
-      <thead>
-        <tr>
-          <th>Sala</th>
-          <th>Localização</th>
-          <th>Capacidade</th>
-          <th>Data</th>
-          <th>Horário</th>
-          <th>Status</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% reservas.forEach(reserva => { %>
-          <tr>
-            <td><%= reserva.sala_nome %></td>
-            <td><%= reserva.localizacao %></td>
-            <td><%= reserva.capacidade %> pessoas</td>
-            <td><%= reserva.data_reserva.toISOString().split('T')[0] %></td>
-            <td><%= reserva.horario_inicio.slice(0,5) %> - <%= reserva.horario_fim.slice(0,5) %></td>
-            <td><%= reserva.status_reserva %></td>
-            <td>
-              <% if (reserva.status_reserva !== 'cancelada') { %>
-              <form action="/reservas/<%= reserva.id_reserva %>/cancelar?_method=PUT" method="POST">
-                <button type="submit" class="cancelar-btn">Cancelar</button>
-              </form>
-              <% } else { %>
-                —
-              <% } %>
-            </td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-  <% } %>
+    <!-- Topbar -->
+    <header class="topbar" id="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <span>☰</span>
+        </button>
+        <h1 class="page-title">Minhas Reservas</h1>
+      </div>
+      <div class="topbar-right">
+        <a href="/" class="btn-logout">
+          <span>🚪</span>
+          <span>Sair</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content" id="mainContent">
+      <div class="minhas-reservas-container">
+        <!-- Header da Página -->
+        <div class="page-header">
+          <h1>Minhas Reservas</h1>
+          <p>Acompanhe o status de todas as suas reservas</p>
+        </div>
+
+        <!-- Seção da Tabela -->
+        <section class="table-section">
+          <div class="table-header">
+            <h2 class="table-title">Histórico de Reservas</h2>
+            <span class="table-count"><%= reservas.length %> reserva(s)</span>
+          </div>
+
+          <% if (reservas && reservas.length > 0) { %>
+            <table class="reservas-table">
+              <thead>
+                <tr>
+                  <th>Sala</th>
+                  <th>Localização</th>
+                  <th>Capacidade</th>
+                  <th>Data & Horário</th>
+                  <th>Status</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% reservas.forEach(reserva => {
+                  // Calcular se a reserva expirou
+                  const dataReserva = new Date(reserva.data_reserva);
+                  const horarioFim = reserva.horario_fim;
+                  const [horas, minutos] = horarioFim.split(':');
+                  const dataHoraFim = new Date(dataReserva);
+                  dataHoraFim.setHours(parseInt(horas), parseInt(minutos));
+                  const agora = new Date();
+                  const expirou = dataHoraFim < agora;
+
+                  // Determinar status final
+                  let statusFinal = reserva.status_reserva;
+                  if (expirou && statusFinal === 'aprovada') {
+                    statusFinal = 'finalizada';
+                  }
+                %>
+                  <tr>
+                    <td>
+                      <div class="sala-info">
+                        <span class="sala-nome"><%= reserva.sala_nome %></span>
+                        <span class="sala-detalhes"><%= reserva.localizacao %></span>
+                      </div>
+                    </td>
+                    <td><%= reserva.localizacao %></td>
+                    <td><%= reserva.capacidade %> pessoas</td>
+                    <td>
+                      <div class="horario-info">
+                        <span class="horario-data"><%= new Date(reserva.data_reserva).toLocaleDateString('pt-BR') %></span>
+                        <span class="horario-periodo"><%= reserva.horario_inicio.slice(0,5) %> às <%= reserva.horario_fim.slice(0,5) %></span>
+                      </div>
+                    </td>
+                    <td>
+                      <% if (statusFinal === 'aprovada') { %>
+                        <span class="status-badge aprovada">Aprovada</span>
+                      <% } else if (statusFinal === 'cancelada') { %>
+                        <span class="status-badge cancelada">Cancelada</span>
+                      <% } else if (statusFinal === 'finalizada') { %>
+                        <span class="status-badge finalizada">Finalizada</span>
+                      <% } else { %>
+                        <span class="status-badge pendente">Pendente</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <% if (statusFinal === 'pendente' || (statusFinal === 'aprovada' && !expirou)) { %>
+                        <form action="/reservas/<%= reserva.id_reserva %>/cancelar?_method=PUT" method="POST" style="display: inline;">
+                          <button type="submit" class="btn-cancelar" onclick="return confirm('Tem certeza que deseja cancelar esta reserva?')">
+                            Cancelar
+                          </button>
+                        </form>
+                      <% } else { %>
+                        <span class="disabled-text">—</span>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <div class="empty-state">
+              <div class="icon">📋</div>
+              <h3>Nenhuma reserva encontrada</h3>
+              <p>Você ainda não fez nenhuma reserva. Que tal fazer sua primeira reserva?</p>
+              <a href="/reservar" class="btn-action">
+                <span>📅</span>
+                <span>Fazer Reserva</span>
+              </a>
+            </div>
+          <% } %>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // ===== FUNCIONALIDADE DA SIDEBAR =====
+    const sidebar = document.getElementById('sidebar');
+    const topbar = document.getElementById('topbar');
+    const mainContent = document.getElementById('mainContent');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      topbar.classList.toggle('sidebar-collapsed');
+      mainContent.classList.toggle('sidebar-collapsed');
+    });
+
+    // ===== FUNCIONALIDADES DE RESERVA =====
+
+    // Função para atualizar status em tempo real (se necessário)
+    function updateReservaStatus() {
+      const now = new Date();
+      const rows = document.querySelectorAll('.reservas-table tbody tr');
+
+      rows.forEach(row => {
+        const statusBadge = row.querySelector('.status-badge');
+        const actionCell = row.querySelector('td:last-child');
+
+        if (statusBadge && statusBadge.classList.contains('aprovada')) {
+          // Verificar se a reserva expirou
+          const horarioInfo = row.querySelector('.horario-periodo');
+          const dataInfo = row.querySelector('.horario-data');
+
+          if (horarioInfo && dataInfo) {
+            const dataText = dataInfo.textContent;
+            const horarioText = horarioInfo.textContent;
+
+            // Extrair horário de fim
+            const horarioFim = horarioText.split(' às ')[1];
+            if (horarioFim) {
+              const [dia, mes, ano] = dataText.split('/');
+              const [horas, minutos] = horarioFim.split(':');
+
+              const dataHoraFim = new Date(ano, mes - 1, dia, horas, minutos);
+
+              if (dataHoraFim < now) {
+                // Atualizar para finalizada
+                statusBadge.textContent = 'Finalizada';
+                statusBadge.className = 'status-badge finalizada';
+
+                // Remover botão de cancelar
+                if (actionCell) {
+                  actionCell.innerHTML = '<span class="disabled-text">—</span>';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // ===== CONFIRMAÇÃO DE CANCELAMENTO =====
+    document.querySelectorAll('.btn-cancelar').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const confirmed = confirm('Tem certeza que deseja cancelar esta reserva?');
+        if (!confirmed) {
+          e.preventDefault();
+        }
+      });
+    });
+
+    // ===== INICIALIZAÇÃO =====
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Página de minhas reservas carregada com sucesso!');
+
+      // Atualizar status das reservas
+      updateReservaStatus();
+
+      // Atualizar status a cada minuto
+      setInterval(updateReservaStatus, 60000);
+    });
+
+    // ===== FUNCIONALIDADES ADICIONAIS =====
+
+    // Função para filtrar reservas por status (para futuras implementações)
+    function filterByStatus(status) {
+      const rows = document.querySelectorAll('.reservas-table tbody tr');
+
+      rows.forEach(row => {
+        const statusBadge = row.querySelector('.status-badge');
+        if (status === 'all' || statusBadge.textContent.toLowerCase().includes(status.toLowerCase())) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    // Função para destacar reservas próximas (para futuras implementações)
+    function highlightUpcomingReservations() {
+      const now = new Date();
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      const rows = document.querySelectorAll('.reservas-table tbody tr');
+
+      rows.forEach(row => {
+        const statusBadge = row.querySelector('.status-badge');
+        const dataInfo = row.querySelector('.horario-data');
+
+        if (statusBadge && statusBadge.classList.contains('aprovada') && dataInfo) {
+          const dataText = dataInfo.textContent;
+          const [dia, mes, ano] = dataText.split('/');
+          const dataReserva = new Date(ano, mes - 1, dia);
+
+          if (dataReserva.toDateString() === tomorrow.toDateString()) {
+            row.style.backgroundColor = 'rgba(24, 161, 53, 0.1)';
+            row.style.border = '1px solid var(--success-color)';
+          }
+        }
+      });
+    }
+
+    // Executar destacamento de reservas próximas
+    highlightUpcomingReservations();
+  </script>
 </body>
 </html>
