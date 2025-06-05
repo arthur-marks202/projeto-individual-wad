@@ -22,6 +22,7 @@ Testes unitários com Jest
 
 ##  Estrutura de Pastas
 
+```
 mvc-boilerplate/
 │
 ├── assets/                          # Recursos visuais e documentação
@@ -115,7 +116,7 @@ mvc-boilerplate/
 ├── readme.md                       # Documentação principal
 ├── rest.http                       # Arquivo para testes de API
 └── server.js                       # Arquivo principal do servidor Express      
-
+```
 ##  Como Executar o Projeto Localmente
 
 ###  Pré-requisitos
