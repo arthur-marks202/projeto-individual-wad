@@ -106,7 +106,8 @@ Controla os lembretes e confirmações enviados aos usuários.
 A seguir está o código SQL utilizado para criação das tabelas no Supabase/PostgreSQL:
 
 ```sql
-CREATE TABLE usuario (
+-- Tabela: usuario
+CREATE TABLE IF NOT EXISTS usuario (
   id_usuario SERIAL PRIMARY KEY,
   nome TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
@@ -114,29 +115,44 @@ CREATE TABLE usuario (
   tipo_usuario TEXT NOT NULL CHECK (tipo_usuario IN ('aluno', 'professor', 'admin'))
 );
 
-CREATE TABLE sala (
+-- Tabela: sala
+CREATE TABLE IF NOT EXISTS sala (
   id_sala SERIAL PRIMARY KEY,
   nome TEXT NOT NULL,
   capacidade INT NOT NULL,
   localizacao TEXT NOT NULL
 );
 
-CREATE TABLE reserva (
+-- Tabela: reserva
+CREATE TABLE IF NOT EXISTS reserva (
   id_reserva SERIAL PRIMARY KEY,
   id_usuario INT NOT NULL REFERENCES usuario(id_usuario),
   id_sala INT NOT NULL REFERENCES sala(id_sala),
   data_reserva DATE NOT NULL,
   horario_inicio TIME NOT NULL,
   horario_fim TIME NOT NULL,
-  status_reserva TEXT NOT NULL DEFAULT 'pendente' CHECK (status_reserva IN ('pendente', 'aprovada', 'cancelada'))
+  status_reserva TEXT NOT NULL DEFAULT 'pendente' CHECK (status_reserva IN ('pendente', 'aprovada', 'cancelada')),
+  CHECK (horario_inicio < horario_fim)
 );
 
-CREATE TABLE notificacao (
+-- Tabela: notificacao
+CREATE TABLE IF NOT EXISTS notificacao (
   id_notificacao SERIAL PRIMARY KEY,
   id_usuario INT NOT NULL REFERENCES usuario(id_usuario),
   mensagem TEXT NOT NULL,
+  tipo_notificacao TEXT NOT NULL,
+  id_reserva INT REFERENCES reserva(id_reserva),
   data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   visualizada BOOLEAN DEFAULT FALSE
+);
+
+-- Tabela: administrador_acao
+CREATE TABLE IF NOT EXISTS administrador_acao (
+  id_acao SERIAL PRIMARY KEY,
+  id_admin INT NOT NULL REFERENCES usuario(id_usuario),
+  id_reserva INT NOT NULL REFERENCES reserva(id_reserva),
+  acao TEXT NOT NULL CHECK (acao IN ('aprovou', 'cancelou')),
+  data_acao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
@@ -343,6 +359,11 @@ Ao aprovar ou rejeitar reservas, o `notificacaoController.js` cria notificaçõe
 ### 3.4. Guia de estilos (Semana 05)
 
 O guia de estilos do sistema **Checkin Room** define um conjunto de componentes visuais, tipografias, cores e ícones com o objetivo de garantir uma identidade visual consistente, moderna e acessível em todas as páginas da aplicação.
+
+<div align="center">
+  <sub>Guia de estilos</sub><br>
+  <img src="assets\guia-projeto.png" width="80%">
+</div>
 
 ##  Tipografia
 
