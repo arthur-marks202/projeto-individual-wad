@@ -821,7 +821,96 @@ O frontend entregue oferece uma experiência completa e moderna, com interface r
 *Indique pontos fortes e pontos a melhorar de maneira geral.*
 *Relacione também quaisquer outras ideias que você tenha para melhorias futuras.*
 
+#### Pontos Fortes do Sistema
 
+Arquitetura e Tecnologia
+
+- Estrutura MVC bem definida com Repository Pattern para escalabilidade
+
+- Stack moderna e estável (Node.js, PostgreSQL, EJS)
+
+- Código modular e organizado facilitando manutenção
+
+- Segurança implementada com criptografia bcrypt e validações
+  
+Experiência do Usuário
+
+- Interface intuitiva e responsiva funcionando em todos os dispositivos
+
+- Feedback visual imediato para todas as ações
+
+- Validações em tempo real orientando o usuário
+
+- Sistema de prioridades automáticas otimizando fluxo administrativo
+
+Funcionalidades de Negócio
+
+- Controle de acesso robusto por tipo de usuário
+
+- Validações inteligentes prevenindo conflitos
+
+- Interface administrativa eficiente com atualizações dinâmicas
+
+- Sistema de status visual com badges coloridos
+
+#### Pontos a Melhorar
+
+Funcionalidades
+
+- Sistema de notificações por email para confirmações
+
+- Relatórios administrativos para análise de uso
+
+- Busca e filtros avançados na interface
+
+- Testes automatizados (unit, integration, e2e)
+
+Aspectos Técnicos
+
+- Documentação da API para futuras integrações
+
+- Cache Redis para melhor performance
+
+- Logs estruturados para monitoramento
+
+- Backup automatizado do banco de dados
+
+#### Trabalhos Futuros
+
+Curto Prazo (1-3 meses)
+
+- Sistema de notificações por email automático
+
+- Relatórios básicos de ocupação de salas
+
+- Testes automatizados para garantir qualidade
+
+- Melhorias de performance com cache
+
+Médio Prazo (3-6 meses)
+
+- API REST completa para integrações externas
+
+- Dashboard de analytics com gráficos interativos
+
+- Progressive Web App (PWA) para instalação móvel
+
+- Integração com calendários institucionais
+
+
+Longo Prazo (6-12 meses)
+
+- Integração com sistemas acadêmicos (SSO, importação de usuários)
+
+- Dispositivos IoT para monitoramento automático de ocupação
+
+- Inteligência artificial para otimização de alocação
+
+- Arquitetura de microserviços para alta escalabilidade
+
+#### Considerações Finais
+
+O sistema Checkin Room foi desenvolvido com sucesso, atendendo todos os requisitos estabelecidos e demonstrando uma arquitetura sólida com interface moderna. A aplicação está pronta para uso em produção e estabelece uma base robusta para futuras expansões.
 
 ## <a name="c5"></a>5. Referências
 
