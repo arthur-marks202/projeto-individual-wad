@@ -127,7 +127,7 @@ mvc-boilerplate/
 
 ---
 
-### ⚙ Instalação
+###  Instalação
 
 1. **Clone o repositório**
 
@@ -143,7 +143,7 @@ npm init -y
 npm install express ejs
 ```  
 
-### 🗃 Inicializar o Banco de Dados
+###  Inicializar o Banco de Dados
 
 Antes de rodar a aplicação, inicialize o banco com o comando:
 

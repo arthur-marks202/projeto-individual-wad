@@ -581,7 +581,233 @@ A seguir estão descritos todos os endpoints implementados na API web do sistema
 
 *Descreva e ilustre aqui o desenvolvimento do frontend do sistema web, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.*
 
+# 3.7 Interface e Navegação
+
+## Visão Geral do Frontend
+
+O frontend do sistema **Checkin Room** foi desenvolvido utilizando **EJS (Embedded JavaScript)** como template engine, **CSS3** para estilização e **JavaScript vanilla** para interatividade. A arquitetura segue o padrão **MVC (Model-View-Controller)**, onde as views são responsáveis pela apresentação e interface do usuário.
+
+## Tecnologias Utilizadas
+
+- **Template Engine**: EJS (Embedded JavaScript)
+- **Estilização**: CSS3 com variáveis CSS customizadas
+- **Interatividade**: JavaScript ES6+
+- **Layout**: Flexbox e CSS Grid
+- **Responsividade**: Media queries
+- **Componentes**: Sidebar e Topbar reutilizáveis
+
+## Arquitetura de Componentes
+
+O sistema utiliza uma arquitetura de componentes modulares:
+
+````
+Frontend Architecture:
+├── Components/
+│   ├── Sidebar (Navegação lateral)
+│   ├── Topbar (Barra superior)
+│   └── Layout (Container principal)
+├── Pages/
+│   ├── Login/Cadastro (Autenticação)
+│   ├── Home (Dashboard principal)
+│   ├── Reservar (Interface de reservas)
+│   ├── Minhas Reservas (Histórico do usuário)
+│   └── Dashboard Admin (Painel administrativo)
+└── Styles/
+    ├── Global (Variáveis e reset)
+    ├── Components (Estilos reutilizáveis)
+    └── Pages (Estilos específicos)
+````
+## Sistema de Design
+
+Paleta de Cores
+
+```
+:root {
+  /* Cores Primárias */
+  --primary-color: #2e2640;      /* Roxo escuro */
+  --primary-hover: #40385c;      /* Roxo claro */
+  
+  /* Cores Funcionais */
+  --success-color: #18A135;      /* Verde - Aprovado */
+  --secondary-color: #E84A4A;    /* Vermelho - Cancelado */
+  --student-color: #3118EF;      /* Azul - Aluno */
+  --teacher-color: #8E6821;      /* Amarelo - Professor */
+  
+  /* Cores Neutras */
+  --neutral-light: #FFFFFF;      /* Branco */
+  --neutral-dark: #3F3357;       /* Cinza escuro */
+}
+```
+Tipografia
+
+- Fonte: Arial, sans-serif
+- Tamanhos: Sistema escalável com variáveis CSS
+- Hierarquia: Títulos, subtítulos e texto corpo bem definidos
+-
+## Páginas e Funcionalidades
+### Página de Login
+
+Arquivo:  ```` views/login.ejs````| CSS: ````public/CSS/Login/styles.css````
+
+Funcionalidades Implementadas:
+
+- Formulário de autenticação responsivo
+- Validação de campos obrigatórios
+- Feedback visual para erros
+- Design centrado com imagem de fundo
+- Botão "Home" para navegação
+
+Características Técnicas:
+
+```
+<!-- Estrutura do formulário -->
+<form action="/login" method="POST" class="login-form">
+  <input type="email" name="email" required>
+  <input type="password" name="senha" required>
+  <button type="submit">Entrar</button>
+</form>
+```
+### Página de Cadastro
+
+Arquivo:  ```views/cadastro.ejs``` | CSS:  ```public/CSS/cadastro/styles.css```
+
+Funcionalidades Implementadas:
+
+- Formulário de registro completo
+- Seleção de tipo de usuário (Aluno/Professor/Admin)
+- Validação de email único
+- Criptografia de senha (bcrypt)
+- Design consistente com a página de login
+
+Características Técnicas:
+
+```
+<!-- Seleção de tipo de usuário -->
+<select name="tipo" required>
+  <option value="aluno">Aluno</option>
+  <option value="professor">Professor</option>
+  <option value="admin">Administrador</option>
+</select>
+```
+
+### Página Home (Dashboard Principal)
+
+Arquivo:  ```views/home.ejs``` | CSS:  ```public/CSS/homePage/styles.css```
+
+Funcionalidades Implementadas:
+
+- Sidebar com navegação principal
+- Topbar com controles de usuário
+- Cards informativos sobre o sistema
+- Seção de estatísticas
+- Área administrativa (para admins)
+- Texto de fundo "CHECKIN ROOM"
+
+Componentes Principais:
+
+```
+<!-- Sidebar de Navegação -->
+<nav class="sidebar">
+  <ul>
+    <li><a href="/reservar">📅 Reservas</a></li>
+    <li><a href="/minhas-reservas">📋 Minhas Reservas</a></li>
+    <li><a href="/admin">⚙️ Painel Admin</a></li>
+  </ul>
+</nav>
+
+<!-- Topbar -->
+<header class="topbar">
+  <button class="sidebar-toggle">☰</button>
+  <a href="/" class="btn-logout">🚪 Sair</a>
+</header>
+```
+
+### Página Minhas Reservas
+
+Arquivo:  ```views/minhasReservas.ejs``` | CSS:  ```public/CSS/minhasReservas/styles.css```
+
+Funcionalidades Implementadas:
+
+- Histórico completo de reservas
+- Sistema de badges coloridos:
+- 🟢 Verde: Aprovada
+- 🔴 Vermelho: Cancelada
+- ⚫ Cinza: Finalizada (expirada)
+- Detecção automática de reservas expiradas
+- Botão de cancelamento (quando aplicável)
+- Contador de reservas
+
+Sistema de Status:
+```
+// Detecção de reservas expiradas
+const dataHoraFim = new Date(dataReserva);
+dataHoraFim.setHours(parseInt(horas), parseInt(minutos));
+const expirou = dataHoraFim < new Date();
+
+if (expirou && statusFinal === 'aprovada') {
+  statusFinal = 'finalizada';
+}
+```
+
+### Interatividade e UX
+
+Funcionalidades JavaScript:
+
+- Validação em tempo real nos formulários
+- Interface dinâmica no dashboard admin
+- Feedback visual para ações do usuário
+- Animações suaves para transições
+- Estados de loading para operações assíncronas
+
+Experiência do Usuário:
+
+- Navegação intuitiva com ícones claros
+- Feedback imediato para todas as ações
+- Estados visuais para diferentes situações
+- Confirmações para ações críticas
+- Mensagens de erro contextuais
+
+### Acessibilidade
+
+- Contraste adequado entre texto e fundo
+- Tamanhos de fonte legíveis
+- Botões com área de clique adequada
+- Navegação por teclado funcional
+- Semântica HTML correta
+
+### Performance
+
+- CSS modular por página
+- JavaScript otimizado sem bibliotecas desnecessárias
+- Imagens otimizadas nos assets
+- Carregamento eficiente de recursos
+- Cache de assets estáticos
+
+### Estrutura de Arquivos CSS
+
+```
+public/CSS/
+├── components/
+│   └── layout.css          # Sidebar, topbar, layout global
+├── Login/
+│   └── styles.css          # Estilos da página de login
+├── cadastro/
+│   └── styles.css          # Estilos da página de cadastro
+├── homePage/
+│   └── styles.css          # Estilos da home
+├── reservar/
+│   └── styles.css          # Estilos da página de reservar
+├── minhasReservas/
+│   └── styles.css          # Estilos de minhas reservas
+└── Dashboard/
+    └── styles.css          # Estilos do dashboard admin
+```
+
+O frontend entregue oferece uma experiência completa e moderna, com interface responsiva, componentes reutilizáveis e funcionalidades avançadas que atendem a todos os requisitos do sistema de reservas de salas.
+
+
 ---
+
 
 ## <a name="c4"></a>4. Desenvolvimento da Aplicação Web (Semana 8)
 
@@ -595,7 +821,96 @@ A seguir estão descritos todos os endpoints implementados na API web do sistema
 *Indique pontos fortes e pontos a melhorar de maneira geral.*
 *Relacione também quaisquer outras ideias que você tenha para melhorias futuras.*
 
+#### Pontos Fortes do Sistema
 
+Arquitetura e Tecnologia
+
+- Estrutura MVC bem definida com Repository Pattern para escalabilidade
+
+- Stack moderna e estável (Node.js, PostgreSQL, EJS)
+
+- Código modular e organizado facilitando manutenção
+
+- Segurança implementada com criptografia bcrypt e validações
+  
+Experiência do Usuário
+
+- Interface intuitiva e responsiva funcionando em todos os dispositivos
+
+- Feedback visual imediato para todas as ações
+
+- Validações em tempo real orientando o usuário
+
+- Sistema de prioridades automáticas otimizando fluxo administrativo
+
+Funcionalidades de Negócio
+
+- Controle de acesso robusto por tipo de usuário
+
+- Validações inteligentes prevenindo conflitos
+
+- Interface administrativa eficiente com atualizações dinâmicas
+
+- Sistema de status visual com badges coloridos
+
+#### Pontos a Melhorar
+
+Funcionalidades
+
+- Sistema de notificações por email para confirmações
+
+- Relatórios administrativos para análise de uso
+
+- Busca e filtros avançados na interface
+
+- Testes automatizados (unit, integration, e2e)
+
+Aspectos Técnicos
+
+- Documentação da API para futuras integrações
+
+- Cache Redis para melhor performance
+
+- Logs estruturados para monitoramento
+
+- Backup automatizado do banco de dados
+
+#### Trabalhos Futuros
+
+Curto Prazo (1-3 meses)
+
+- Sistema de notificações por email automático
+
+- Relatórios básicos de ocupação de salas
+
+- Testes automatizados para garantir qualidade
+
+- Melhorias de performance com cache
+
+Médio Prazo (3-6 meses)
+
+- API REST completa para integrações externas
+
+- Dashboard de analytics com gráficos interativos
+
+- Progressive Web App (PWA) para instalação móvel
+
+- Integração com calendários institucionais
+
+
+Longo Prazo (6-12 meses)
+
+- Integração com sistemas acadêmicos (SSO, importação de usuários)
+
+- Dispositivos IoT para monitoramento automático de ocupação
+
+- Inteligência artificial para otimização de alocação
+
+- Arquitetura de microserviços para alta escalabilidade
+
+#### Considerações Finais
+
+O sistema Checkin Room foi desenvolvido com sucesso, atendendo todos os requisitos estabelecidos e demonstrando uma arquitetura sólida com interface moderna. A aplicação está pronta para uso em produção e estabelece uma base robusta para futuras expansões.
 
 ## <a name="c5"></a>5. Referências
 
