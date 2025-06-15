@@ -813,8 +813,11 @@ O frontend entregue oferece uma experiência completa e moderna, com interface r
 
 ### 4.1 Demonstração do Sistema Web (Semana 8)
 
-*VIDEO: Insira o link do vídeo demonstrativo nesta seção*
-*Descreva e ilustre aqui o desenvolvimento do sistema web completo, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.*
+<div style="display: flex; justify-content: center;">
+  <video width="640" controls>
+    <source src="assets\Ponderda_MVC.mp4" type="video/mp4">
+  </video>
+</div>
 
 ### 4.2 Conclusões e Trabalhos Futuros (Semana 8)
 
@@ -908,9 +911,6 @@ Longo Prazo (6-12 meses)
 
 - Arquitetura de microserviços para alta escalabilidade
 
-#### Considerações Finais
-
-O sistema Checkin Room foi desenvolvido com sucesso, atendendo todos os requisitos estabelecidos e demonstrando uma arquitetura sólida com interface moderna. A aplicação está pronta para uso em produção e estabelece uma base robusta para futuras expansões.
 
 ## <a name="c5"></a>5. Referências
 
