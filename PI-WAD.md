@@ -813,11 +813,7 @@ O frontend entregue oferece uma experiência completa e moderna, com interface r
 
 ### 4.1 Demonstração do Sistema Web (Semana 8)
 
-<div style="display: flex; justify-content: center;">
-  <video width="640" controls>
-    <source src="assets\Ponderda_MVC.mp4" type="video/mp4">
-  </video>
-</div>
+[Assista ao vídeo](assets\Ponderda_MVC.mp4)
 
 ### 4.2 Conclusões e Trabalhos Futuros (Semana 8)
 
