@@ -813,7 +813,7 @@ O frontend entregue oferece uma experiência completa e moderna, com interface r
 
 ### 4.1 Demonstração do Sistema Web (Semana 8)
 
-[Assista ao vídeo](assets\Ponderda_MVC.mp4)
+[Assista ao vídeo](https://drive.google.com/file/d/1geN3zPFOoKeG2ecJES8ddx40C37wukpa/view?usp=sharing)
 
 ### 4.2 Conclusões e Trabalhos Futuros (Semana 8)
 
